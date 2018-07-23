@@ -1,3 +1,1 @@
-# Jet Training
-
-Training modules for [Hazelcast Jet](http://jet.hazelcast.org/)
+# Stream Processing Essentials (Jet Training)
