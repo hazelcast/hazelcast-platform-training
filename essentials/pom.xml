@@ -10,6 +10,14 @@
 	<version>1.0</version>
 
 	<modules>
+		<module>lab01</module>
+		<module>lab02</module>
+		<module>lab03</module>
+		<module>lab04</module>
+		<module>lab05</module>
+		<module>lab06</module>
+		<module>lab07</module>
+		<module>lab08</module>
 	</modules>
 
 	<properties>
