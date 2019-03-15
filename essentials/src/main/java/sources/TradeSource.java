@@ -1,5 +1,5 @@
-package sources;/*
- * Copyright (c) 2008-2018, Hazelcast, Inc. All Rights Reserved.
+/*
+ * Copyright (c) 2008-2019, Hazelcast, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@ package sources;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package sources;
 
 import com.hazelcast.jet.pipeline.SourceBuilder;
 import com.hazelcast.jet.pipeline.StreamSource;
@@ -50,7 +52,7 @@ public class TradeSource {
             this.tradesPerSec = tradesPerSec;
         }
 
-        public void fillBuffer(SourceBuilder.TimestampedSourceBuffer<Trade> buffer) {
+        void fillBuffer(SourceBuilder.TimestampedSourceBuffer<Trade> buffer) {
             ThreadLocalRandom rnd = ThreadLocalRandom.current();
 
             for (int i = 0; i < tradesPerSec; i++) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2018, Hazelcast, Inc. All Rights Reserved.
+ * Copyright (c) 2008-2019, Hazelcast, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,10 @@
 
 package dto;
 
-import java.io.Serializable;
-
 /**
- * We use java.io.{@link Serializable} here for the sake of simplicity.
- * In production, Hazelcast Custom Serialization should be used.
+ * Enriched version of {@link Trade} which includes the trader name
  */
-public class EnrichedTrade extends Trade implements Serializable {
+public class EnrichedTrade extends Trade {
 
     private final String trader;
 
@@ -31,9 +28,13 @@ public class EnrichedTrade extends Trade implements Serializable {
         this.trader = trader;
     }
 
+    public String getTrader() {
+        return trader;
+    }
+
     @Override
     public String toString() {
-        return "Trade{time=" + getTime() + ", trader='" + trader + '\'' + ", quantity=" + getQuantity()
+        return "Trade{time=" + getTime() + ", trader='" + getTrader() + '\'' + ", quantity=" + getQuantity()
                 + ", price=" + getPrice() + '}';
     }
 }
