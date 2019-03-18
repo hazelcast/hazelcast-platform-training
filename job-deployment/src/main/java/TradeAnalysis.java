@@ -14,44 +14,61 @@
  * limitations under the License.
  */
 
-package solutions;
-
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
-import com.hazelcast.jet.Job;
 import com.hazelcast.jet.aggregate.AggregateOperations;
-import com.hazelcast.jet.function.ComparatorEx;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
+import com.hazelcast.jet.pipeline.WindowDefinition;
+import com.hazelcast.jet.server.JetBootstrap;
 import dto.Trade;
 import sources.TradeSource;
 
-public class Solution3 {
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.stream.Collectors.toList;
+
+public class TradeAnalysis {
 
     public static void main(String[] args) {
         Pipeline p = buildPipeline();
 
-        JetInstance jet = Jet.newJetInstance();
+        JetInstance jet = JetBootstrap.getInstance();
 
         try {
-            Job job = jet.newJob(p);
-            job.join();
+            jet.newJob(p).join();
         } finally {
-            jet.shutdown();
+            Jet.shutdownAll();
         }
     }
 
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.drawFrom(TradeSource.tradeSource())
+        p.drawFrom(TradeSource.tradeSource(loadTickers(), 100_000))
                 .withNativeTimestamps(0)
-                .rollingAggregate(AggregateOperations.maxBy(ComparatorEx.comparingInt(Trade::getPrice)))
+                .groupingKey(Trade::getTicker)
+                .window(WindowDefinition.tumbling(3000))
+                .aggregate(AggregateOperations.averagingLong(Trade::getPrice))
                 .drainTo(Sinks.logger());
 
-//        source.rollingAggregate(AggregateOperations.averagingLong(a -> Long.valueOf(a.getPrice())))
-//                .drainTo(Sinks.logger());
-
         return p;
+    }
+
+    private static List<String> loadTickers() {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                TradeAnalysis.class.getResourceAsStream("/nasdaqlisted.txt"), UTF_8))
+        ) {
+            return reader.lines()
+                    .skip(1)
+                    .map(l -> l.split("\\|")[0])
+                    .collect(toList());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

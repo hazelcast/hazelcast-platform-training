@@ -22,9 +22,6 @@ import com.hazelcast.jet.pipeline.Pipeline;
 public class Lab5 {
 
     public static void main (String[] args) {
-        // configure Hazelcast Jet to use log4j for log messages
-        System.setProperty("hazelcast.logging.type", "log4j");
-
         Pipeline p = buildPipeline();
 
         JetInstance jet = Jet.newJetInstance();

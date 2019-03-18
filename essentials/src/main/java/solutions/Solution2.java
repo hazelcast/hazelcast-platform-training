@@ -33,9 +33,6 @@ public class Solution2 {
     private static final String LOOKUP_TABLE = "lookup-table" ;
 
     public static void main (String[] args) {
-        // configure Hazelcast Jet to use log4j for log messages
-        System.setProperty("hazelcast.logging.type", "log4j");
-
         Pipeline p = buildPipeline();
 
         JetInstance jet = Jet.newJetInstance();
@@ -68,7 +65,7 @@ public class Solution2 {
         Pipeline p = Pipeline.create();
 
         p.drawFrom(TradeSource.tradeSource())
-                .withIngestionTimestamps()
+                .withNativeTimestamps(0)
                 .mapUsingIMap(LOOKUP_TABLE, Trade::getTicker,
                         (trade, trader) -> new EnrichedTrade(trade, trader.toString()) )
                 .drainTo(Sinks.logger());

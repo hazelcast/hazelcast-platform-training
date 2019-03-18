@@ -29,9 +29,6 @@ import sources.TradeSource;
 public class Solution4 {
 
     public static void main(String[] args) {
-        // configure Hazelcast Jet to use log4j for log messages
-        System.setProperty("hazelcast.logging.type", "log4j");
-
         Pipeline p = buildPipeline();
 
         JetInstance jet = Jet.newJetInstance();
@@ -48,7 +45,7 @@ public class Solution4 {
         Pipeline p = Pipeline.create();
 
         p.drawFrom(TradeSource.tradeSource())
-                .withIngestionTimestamps()
+                .withNativeTimestamps(0)
                 .window(WindowDefinition.tumbling(3000).setEarlyResultsPeriod(1000))
                 .aggregate(AggregateOperations.summingLong(Trade::getPrice))
                 .drainTo(Sinks.logger());

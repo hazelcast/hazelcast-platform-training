@@ -27,9 +27,6 @@ public class Lab2 {
     private static final String LOOKUP_TABLE = "lookup-table";
 
     public static void main(String[] args) throws InterruptedException {
-        // configure Hazelcast Jet to use log4j for log messages
-        System.setProperty("hazelcast.logging.type", "log4j");
-
         Pipeline p = buildPipeline();
 
         JetInstance jet = Jet.newJetInstance();
