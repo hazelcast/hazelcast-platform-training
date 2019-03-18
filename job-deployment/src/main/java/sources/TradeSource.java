@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.LockSupport;
 import java.util.stream.Collectors;
 
 public class TradeSource {
@@ -45,27 +44,32 @@ public class TradeSource {
 
     private static class TradeGenerator {
 
+        private static final int MAX_BATCH_SIZE = 16*1024;
+
         private final List<String> tickers;
         private final int tradesPerSec;
+        private long emitSchedule;
 
         private static final int QUANTITY = 100;
 
         TradeGenerator(List<String> tickers, int tradesPerSec) {
             this.tickers = tickers;
             this.tradesPerSec = tradesPerSec;
+            this.emitSchedule = System.nanoTime();
         }
 
         void fillBuffer(SourceBuilder.TimestampedSourceBuffer<Trade> buffer) {
+            long interval = TimeUnit.SECONDS.toNanos(1) / tradesPerSec;
             ThreadLocalRandom rnd = ThreadLocalRandom.current();
-
-            for (int i = 0; i < tradesPerSec; i++) {
+            for (int i = 0; i < MAX_BATCH_SIZE; i++) {
+                if (System.nanoTime() < emitSchedule) {
+                    break;
+                }
                 String ticker = tickers.get(rnd.nextInt(tickers.size()));
-                long tradeTime = System.currentTimeMillis();
-                Trade trade = new Trade(tradeTime, ticker, QUANTITY, rnd.nextInt(5000));
-                buffer.add(trade, tradeTime);
+                Trade trade = new Trade(System.currentTimeMillis(), ticker, QUANTITY, rnd.nextInt(5000));
+                buffer.add(trade, trade.getTime());
+                emitSchedule += interval;
             }
-
-            LockSupport.parkNanos(TimeUnit.SECONDS.toNanos(1)); // sleep for 1 second
         }
     }
 }
