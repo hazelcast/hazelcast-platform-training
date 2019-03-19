@@ -11,7 +11,7 @@
         <port>5701</port>
         <join>
             <multicast enabled="false" />
-            <!--<tcp-ip>-->
+            <!--<tcp-ip enabled="true">-->
                 <!--<member>127.0.0.1</member>-->
             <!--</tcp-ip>-->
         </join>

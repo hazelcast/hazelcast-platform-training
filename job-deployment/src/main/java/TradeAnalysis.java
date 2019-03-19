@@ -17,6 +17,8 @@
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.aggregate.AggregateOperations;
+import com.hazelcast.jet.config.JobConfig;
+import com.hazelcast.jet.config.ProcessingGuarantee;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.WindowDefinition;
@@ -43,7 +45,11 @@ public class TradeAnalysis {
         JetInstance jet = JetBootstrap.getInstance();
 
         try {
-            jet.newJob(p).join();
+            JobConfig jobConfig = new JobConfig()
+                    .setAutoScaling(true)
+                    .setProcessingGuarantee(ProcessingGuarantee.EXACTLY_ONCE);
+
+            jet.newJob(p, jobConfig).join();
         } finally {
             Jet.shutdownAll();
         }
