@@ -71,7 +71,7 @@ public class TradeMonitorGui {
             int idx = dataset.getSeriesIndex(key);
             XYSeries series;
             if (idx == -1) {
-                series = new XYSeries(key);
+                series = new XYSeries(key, true, false);
                 dataset.addSeries(series);
             } else {
                 series = dataset.getSeries(idx);
