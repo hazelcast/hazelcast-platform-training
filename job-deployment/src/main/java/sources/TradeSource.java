@@ -48,12 +48,14 @@ public class TradeSource {
 
         private final List<String> tickers;
         private final int tradesPerSec;
+        private final Map<String, Integer> tickerToPrice;
         private long emitSchedule;
 
         private static final int QUANTITY = 100;
 
         TradeGenerator(List<String> tickers, int tradesPerSec) {
             this.tickers = tickers;
+            this.tickerToPrice  = tickers.stream().collect(Collectors.toMap(t -> t, t -> 2500));
             this.tradesPerSec = tradesPerSec;
             this.emitSchedule = System.nanoTime();
         }
@@ -66,7 +68,8 @@ public class TradeSource {
                     break;
                 }
                 String ticker = tickers.get(rnd.nextInt(tickers.size()));
-                Trade trade = new Trade(System.currentTimeMillis(), ticker, QUANTITY, rnd.nextInt(5000));
+                int price = tickerToPrice.compute(ticker, (t, v) -> v + rnd.nextInt(-1, 2));
+                Trade trade = new Trade(System.currentTimeMillis(), ticker, QUANTITY, price);
                 buffer.add(trade, trade.getTime());
                 emitSchedule += interval;
             }

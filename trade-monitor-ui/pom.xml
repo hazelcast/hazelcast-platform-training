@@ -35,7 +35,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>TradeMonitor</mainClass>
+                            <mainClass>TradeMonitorGui</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

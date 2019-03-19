@@ -20,7 +20,6 @@ import com.hazelcast.jet.aggregate.AggregateOperations;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.WindowDefinition;
-
 import com.hazelcast.jet.server.JetBootstrap;
 import dto.Trade;
 import sources.TradeSource;
