@@ -30,10 +30,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import static com.hazelcast.jet.Util.entry;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
 
 public class TradeAnalysis {
+
+    public static final int TRADES_PER_SEC = 100_000;
 
     public static void main(String[] args) {
         Pipeline p = buildPipeline();
@@ -50,12 +53,13 @@ public class TradeAnalysis {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.drawFrom(TradeSource.tradeSource(loadTickers(), 100_000))
+        p.drawFrom(TradeSource.tradeSource(loadTickers(), TRADES_PER_SEC))
                 .withNativeTimestamps(0)
                 .groupingKey(Trade::getTicker)
-                .window(WindowDefinition.tumbling(3000))
+                .window(WindowDefinition.sliding(60_000, 1_000))
                 .aggregate(AggregateOperations.averagingLong(Trade::getPrice))
-                .drainTo(Sinks.logger());
+                .map(res -> entry(res.getKey(), res))
+                .drainTo(Sinks.map("prices"));
 
         return p;
     }

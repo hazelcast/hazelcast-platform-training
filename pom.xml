@@ -12,6 +12,7 @@
     <modules>
         <module>essentials</module>
         <module>job-deployment</module>
+        <module>trade-monitor-ui</module>
     </modules>
 
     <properties>
