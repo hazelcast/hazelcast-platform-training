@@ -39,7 +39,7 @@ public class Lab5 {
 
         // read from the Trade Source and ingestion timestamps
 
-        // How much did we sell over last 3 minutes for each ticker?
+        // How much did we sell over last 3 seconds for each ticker?
         // Sum trade prices per ticker, Use 3 sec tumbling windows
 
         return p;

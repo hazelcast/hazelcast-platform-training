@@ -47,6 +47,7 @@ public class TradeAnalysis {
         try {
             JobConfig jobConfig = new JobConfig()
                     .setAutoScaling(true)
+                    .setName("TradeAnalysis")
                     .setProcessingGuarantee(ProcessingGuarantee.EXACTLY_ONCE);
 
             jet.newJob(p, jobConfig).join();

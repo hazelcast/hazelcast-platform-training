@@ -40,14 +40,15 @@ public class Lab1 {
         final String DIRECTORY = "data/";
 
         // STEP 1:
-        // draw using file watcher from the com.hazelcast.jet.pipeline.Sources source library
-        // hint: it's non-timestamped stream
+        // Draw using file watcher from the com.hazelcast.jet.pipeline.Sources source library
+        // Hint: it's non-timestamped stream
 
-        // drain to logger using the sink from the library com.hazelcast.jet.pipeline.Sinks;
+        // Drain to logger using the sink from the library com.hazelcast.jet.pipeline.Sinks;
 
-        // run this pipeline to test it!
+        // Run this pipeline to test it!
 
-        // STEP 2: add a filter and filter out all "hello" words
+        // STEP 2:
+        // Filter out all lines which are not equal to the string "hello"
         // Add text lines to the file.
         // Use echo -- some text editors create a new file for every save. That results in replaying the file.
         //

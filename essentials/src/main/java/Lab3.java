@@ -37,7 +37,6 @@ public class Lab3 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-
         // read from the Trade Source and ingestion timestamps
 
         // compute max rolling price - the max will be updated and emitted with each incoming trade

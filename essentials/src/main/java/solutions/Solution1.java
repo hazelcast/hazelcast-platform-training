@@ -42,7 +42,7 @@ public class Solution1 {
 
         p.drawFrom(Sources.fileWatcher(DIRECTORY))
                 .withoutTimestamps()
-                .filter(a -> !"hello".equals(a))
+                .filter(line -> !"hello".equalsIgnoreCase(line))
                 .drainTo(Sinks.logger());
 
         return p;

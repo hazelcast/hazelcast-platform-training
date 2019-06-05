@@ -16,6 +16,8 @@
 
 package solutions;
 
+import com.hazelcast.core.IMap;
+import com.hazelcast.core.ReplicatedMap;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Job;
@@ -33,15 +35,15 @@ public class Solution2 {
     private static final String LOOKUP_TABLE = "lookup-table" ;
 
     public static void main (String[] args) {
-        Pipeline p = buildPipeline();
-
         JetInstance jet = Jet.newJetInstance();
 
         // ReplicatedMap<String, String> lookupTable = jet.getReplicatedMap(LOOKUP_TABLE);
-        Map<String, String> lookupTable = jet.getMap(LOOKUP_TABLE);
+        IMap<String, String> lookupTable = jet.getMap(LOOKUP_TABLE);
         lookupTable.put("A", "Trader A");
         lookupTable.put("B", "Trader B");
         lookupTable.put("C", "Trader C");
+
+        Pipeline p = buildPipeline(lookupTable);
 
         try {
             Job job = jet.newJob(p);
@@ -61,13 +63,27 @@ public class Solution2 {
         }
     }
 
-    private static Pipeline buildPipeline() {
+    // use IMap
+    private static Pipeline buildPipeline(IMap<String, String> lookupTable) {
         Pipeline p = Pipeline.create();
 
         p.drawFrom(TradeSource.tradeSource())
                 .withNativeTimestamps(0)
-                .mapUsingIMap(LOOKUP_TABLE, Trade::getTicker,
-                        (trade, trader) -> new EnrichedTrade(trade, trader.toString()) )
+                .mapUsingIMap(lookupTable, trade -> trade.getTicker(),
+                        (trade, trader) -> new EnrichedTrade(trade, trader) )
+                .drainTo(Sinks.logger());
+
+        return p;
+    }
+
+    // use ReplicatedMap
+    private static Pipeline buildPipeline(ReplicatedMap<String, String> lookupTable) {
+        Pipeline p = Pipeline.create();
+
+        p.drawFrom(TradeSource.tradeSource())
+                .withNativeTimestamps(0)
+                .mapUsingReplicatedMap(lookupTable, trade -> trade.getTicker(),
+                        (trade, trader) -> new EnrichedTrade(trade, trader) )
                 .drainTo(Sinks.logger());
 
         return p;

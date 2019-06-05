@@ -23,6 +23,7 @@ import com.hazelcast.jet.aggregate.AggregateOperations;
 import com.hazelcast.jet.function.ComparatorEx;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
+import com.hazelcast.jet.pipeline.StreamStage;
 import dto.Trade;
 import sources.TradeSource;
 
@@ -44,12 +45,13 @@ public class Solution3 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.drawFrom(TradeSource.tradeSource())
-                .withNativeTimestamps(0)
-                .rollingAggregate(AggregateOperations.maxBy(ComparatorEx.comparingInt(Trade::getPrice)))
+        StreamStage<Trade> source = p.drawFrom(TradeSource.tradeSource())
+                .withNativeTimestamps(0);
+
+        source.rollingAggregate(AggregateOperations.maxBy(ComparatorEx.comparingInt(trade -> trade.getPrice())))
                 .drainTo(Sinks.logger());
 
-//        source.rollingAggregate(AggregateOperations.averagingLong(a -> Long.valueOf(a.getPrice())))
+//        source.rollingAggregate(AggregateOperations.averagingLong(trade -> trade.getPrice()))
 //                .drainTo(Sinks.logger());
 
         return p;
