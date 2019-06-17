@@ -28,27 +28,27 @@ import java.util.concurrent.locks.LockSupport;
 
 public class TradeSource {
 
-    private static final List<String> TICKERS = Arrays.asList("A", "B", "C");
+    private static final List<String> SYMBOLS = Arrays.asList("AAPL", "GOOGL", "MSFT");
 
     public static StreamSource<Trade> tradeSource() {
         return tradeSource(1);
     }
 
     public static StreamSource<Trade> tradeSource(int tradesPerSec) {
-        return SourceBuilder.timestampedStream("trade-source", x -> new TradeGenerator(TICKERS, tradesPerSec))
+        return SourceBuilder.timestampedStream("trade-source", x -> new TradeGenerator(SYMBOLS, tradesPerSec))
                 .fillBufferFn(TradeGenerator::fillBuffer)
                 .build();
     }
 
     private static class TradeGenerator {
 
-        private final List<String> tickers;
+        private final List<String> symbols;
         private final int tradesPerSec;
 
         private static final int QUANTITY = 100;
 
-        TradeGenerator(List<String> tickers, int tradesPerSec) {
-            this.tickers = tickers;
+        TradeGenerator(List<String> symbols, int tradesPerSec) {
+            this.symbols = symbols;
             this.tradesPerSec = tradesPerSec;
         }
 
@@ -56,7 +56,7 @@ public class TradeSource {
             ThreadLocalRandom rnd = ThreadLocalRandom.current();
 
             for (int i = 0; i < tradesPerSec; i++) {
-                String ticker = tickers.get(rnd.nextInt(tickers.size()));
+                String ticker = symbols.get(rnd.nextInt(symbols.size()));
                 long tradeTime = System.currentTimeMillis();
                 Trade trade = new Trade(tradeTime, ticker, QUANTITY, rnd.nextInt(5000));
                 buffer.add(trade, tradeTime);

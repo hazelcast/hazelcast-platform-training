@@ -37,10 +37,13 @@ public class Lab5 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        // read from the Trade Source and ingestion timestamps
+        // 1 - Read from the Trade Source (sources.TradeSource)
 
-        // How much did we sell over last 3 seconds for each ticker?
-        // Sum trade prices per ticker, Use 3 sec tumbling windows
+        // 2 - Use Native timestamps, no lag allowed
+
+        // 3 - Compute sum of trades in 3-second intervals for each symbol
+
+        // 4 - Drain to logger sink
 
         return p;
     }

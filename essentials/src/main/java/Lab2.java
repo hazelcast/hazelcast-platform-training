@@ -27,27 +27,20 @@ public class Lab2 {
 
     private static final String LOOKUP_TABLE = "lookup-table";
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         JetInstance jet = Jet.newJetInstance();
 
-        // ReplicatedMap<String, String> lookupTable = jet.getReplicatedMap(LOOKUP_TABLE);
+        // symbol -> company name
+        // random symbols from https://www.nasdaq.com
         IMap<String, String> lookupTable = jet.getMap(LOOKUP_TABLE);
-        lookupTable.put("A", "Trader A");
-        lookupTable.put("B", "Trader B");
-        lookupTable.put("C", "Trader C");
+        lookupTable.put("AAPL", "Apple Inc. - Common Stock");
+        lookupTable.put("GOOGL", "Alphabet Inc.");
+        lookupTable.put("MSFT", "Microsoft Corporation");
 
         Pipeline p = buildPipeline(lookupTable);
 
         try {
-            Job job = jet.newJob(p);
-
-            Thread.sleep(5000);
-
-            lookupTable.put("A", "Trader A_A");
-            lookupTable.put("B", "Trader B_B");
-            lookupTable.put("C", "Trader C_C");
-
-            job.join();
+            jet.newJob(p).join();
         } finally {
             jet.shutdown();
         }
@@ -56,14 +49,16 @@ public class Lab2 {
     private static Pipeline buildPipeline(IMap<String, String> lookupTable) {
         Pipeline p = Pipeline.create();
 
-        // read from the Trade Source (sources.TradeSource) - it's custom source generating Trades (dto.Trade)
-        // Use ingestion timestamps
+        // 1 - Read from the Trade Source (sources.TradeSource) - it's custom source generating Trades (dto.Trade)
 
-        // Convert Trade (dto.Trade) into Enriched Trade (dto.EnrichedTrade)
-        // - use the Trade ticker to look up the trader name in the IMap
-        // -
+        // 2 - Without timestamps
 
-        // drain to sink
+        // 3 - Convert Trade stream to Enriched Trade stream
+        // - Trade (dto.Trade) has a symbol field
+        // - Use LOOKUP_TABLE to look up full company name based on the symbol
+        // - Create new Enriched Trade (dto.EnrichedTrade) using Trade and company name
+
+        // 4 - Drain to sink
 
         return p;
     }

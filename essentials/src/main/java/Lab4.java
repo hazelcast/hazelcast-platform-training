@@ -38,18 +38,23 @@ public class Lab4 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        // read from the Trade Source and ingestion timestamps
+        // 1 - Read from the Trade Source (sources.TradeSource)
 
-        // How much did we sell over last 3 minutes?
+        // 2 - Use Native timestamps, no lag allowed
+
+        // 3 - Compute sum of trades for 3-second intervals
         //
-        // STEP 1
-        // Use 3 sec tumbling windows (defined in WindowDef.tumbling with size 3000
-        // Sum trade prices
+        // STEP 3.1
+        // - Use 3 sec tumbling windows (defined in WindowDef.tumbling with size 3000
+        // - Sum trade prices
 
-        // STEP 2
-        // Get speculative results every second
-        // Use early results when defining the window
-        // Watch the early result flag in the console output
+        // STEP 3.2
+        // - Get speculative results every second
+        // - Use early results when defining the window
+        // - Watch the early result flag in the console output
+
+        // 4 - Drain to logger sink
+
 
         return p;
     }

@@ -26,6 +26,8 @@ import com.hazelcast.jet.pipeline.WindowDefinition;
 import dto.Trade;
 import sources.TradeSource;
 
+import static com.hazelcast.jet.impl.util.Util.toLocalTime;
+
 public class Solution5 {
 
     public static void main(String[] args) {
@@ -45,9 +47,9 @@ public class Solution5 {
         Pipeline p = Pipeline.create();
 
         p.drawFrom(TradeSource.tradeSource(1000))
-                .withNativeTimestamps(0)
-                .groupingKey(Trade::getTicker)
-                .window(WindowDefinition.tumbling(3000))
+                .withNativeTimestamps(0 )
+                .groupingKey(Trade::getSymbol)
+                .window(WindowDefinition.tumbling(3000).setEarlyResultsPeriod(1000))
                 .aggregate(AggregateOperations.summingLong(Trade::getPrice))
                 .drainTo(Sinks.logger());
 

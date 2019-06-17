@@ -44,7 +44,7 @@ public class Solution4 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.drawFrom(TradeSource.tradeSource())
+        p.drawFrom(TradeSource.tradeSource(1000))
                 .withNativeTimestamps(0)
                 .window(WindowDefinition.tumbling(3000).setEarlyResultsPeriod(1000))
                 .aggregate(AggregateOperations.summingLong(Trade::getPrice))

@@ -37,13 +37,16 @@ public class Lab3 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        // read from the Trade Source and ingestion timestamps
+        // 1 - Read from the Trade Source (sources.TradeSource)
 
-        // compute max rolling price - the max will be updated and emitted with each incoming trade
-        // use com.hazelcast.jet.aggregate.AggregateOperations library with aggregations
-        // use com.hazelcast.jet.function.ComparatorEx library
+        // 2 - Without timestamps
 
-        // drain to logger sink
+        // 3 - Compute max rolling price
+        // - the max will be updated and emitted with each incoming trade
+        // - use com.hazelcast.jet.aggregate.AggregateOperations library with aggregations
+        // - use com.hazelcast.jet.function.ComparatorEx library
+
+        // 4 - Drain max to logger sink
 
         return p;
     }
