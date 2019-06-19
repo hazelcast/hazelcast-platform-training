@@ -17,7 +17,6 @@
 package solutions;
 
 import com.hazelcast.core.IMap;
-import com.hazelcast.core.ReplicatedMap;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Job;
@@ -27,63 +26,36 @@ import dto.EnrichedTrade;
 import dto.Trade;
 import sources.TradeSource;
 
-import java.util.Map;
-
 
 public class Solution2 {
 
     private static final String LOOKUP_TABLE = "lookup-table" ;
 
     public static void main (String[] args) {
+        Pipeline p = buildPipeline();
+
         JetInstance jet = Jet.newJetInstance();
 
-        // ReplicatedMap<String, String> lookupTable = jet.getReplicatedMap(LOOKUP_TABLE);
+        // symbol -> company name
         IMap<String, String> lookupTable = jet.getMap(LOOKUP_TABLE);
-        lookupTable.put("A", "Trader A");
-        lookupTable.put("B", "Trader B");
-        lookupTable.put("C", "Trader C");
-
-        Pipeline p = buildPipeline(lookupTable);
+        lookupTable.put("AAPL", "Apple Inc. - Common Stock");
+        lookupTable.put("GOOGL", "Alphabet Inc.");
+        lookupTable.put("MSFT", "Microsoft Corporation");
 
         try {
-            Job job = jet.newJob(p);
-
-            Thread.sleep(5000);
-
-            lookupTable.put("A", "Trader A_A");
-            lookupTable.put("B", "Trader B_B");
-            lookupTable.put("C", "Trader C_C");
-
-            job.join();
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            jet.newJob(p).join();
         } finally {
             jet.shutdown();
         }
     }
 
-    // use IMap
-    private static Pipeline buildPipeline(IMap<String, String> lookupTable) {
+    private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
         p.drawFrom(TradeSource.tradeSource())
                 .withNativeTimestamps(0)
-                .mapUsingIMap(lookupTable, trade -> trade.getTicker(),
-                        (trade, trader) -> new EnrichedTrade(trade, trader) )
-                .drainTo(Sinks.logger());
-
-        return p;
-    }
-
-    // use ReplicatedMap
-    private static Pipeline buildPipeline(ReplicatedMap<String, String> lookupTable) {
-        Pipeline p = Pipeline.create();
-
-        p.drawFrom(TradeSource.tradeSource())
-                .withNativeTimestamps(0)
-                .mapUsingReplicatedMap(lookupTable, trade -> trade.getTicker(),
-                        (trade, trader) -> new EnrichedTrade(trade, trader) )
+                .mapUsingIMap(LOOKUP_TABLE, Trade::getSymbol,
+                        (trade, companyName) -> new EnrichedTrade(trade, companyName.toString()) )
                 .drainTo(Sinks.logger());
 
         return p;

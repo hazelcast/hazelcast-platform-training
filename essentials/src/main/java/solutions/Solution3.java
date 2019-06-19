@@ -51,9 +51,6 @@ public class Solution3 {
         source.rollingAggregate(AggregateOperations.maxBy(ComparatorEx.comparingInt(trade -> trade.getPrice())))
                 .drainTo(Sinks.logger());
 
-//        source.rollingAggregate(AggregateOperations.averagingLong(trade -> trade.getPrice()))
-//                .drainTo(Sinks.logger());
-
         return p;
     }
 }

@@ -25,13 +25,13 @@ import java.io.Serializable;
 public class Trade implements Serializable {
 
     private final long time;
-    private final String ticker;
+    private final String symbol;
     private final int quantity;
     private final int price; // in cents
 
     public Trade(long time, String ticker, int quantity, int price) {
         this.time = time;
-        this.ticker = ticker;
+        this.symbol = ticker;
         this.quantity = quantity;
         this.price = price;
     }
@@ -44,10 +44,10 @@ public class Trade implements Serializable {
     }
 
     /**
-     * The ticker
+     * The symbol
      */
-    public String getTicker() {
-        return ticker;
+    public String getSymbol() {
+        return symbol;
     }
 
     public int getQuantity() {
@@ -63,7 +63,7 @@ public class Trade implements Serializable {
 
     @Override
     public String toString() {
-        return "Trade{time=" + time + ", ticker='" + ticker + '\'' + ", quantity=" + quantity
+        return "Trade{time=" + time + ", symbol='" + symbol + '\'' + ", quantity=" + quantity
                 + ", price=" + price + '}';
     }
 }

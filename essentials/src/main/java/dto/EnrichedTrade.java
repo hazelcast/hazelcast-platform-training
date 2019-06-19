@@ -16,25 +16,31 @@
 
 package dto;
 
+import java.io.Serializable;
+
+
 /**
- * Enriched version of {@link Trade} which includes the trader name
+ * Enriched version of {@link Trade} which includes the company name
+ *
+ * We use java.io.{@link java.io.Serializable} here for the sake of simplicity.
+ * In production, Hazelcast Custom Serialization should be used.
  */
-public class EnrichedTrade extends Trade {
+public class EnrichedTrade extends Trade implements Serializable {
 
-    private final String trader;
+    private final String companyName;
 
-    public EnrichedTrade(Trade trade, String trader) {
-        super(trade.getTime(),trade.getTicker(),trade.getQuantity(), trade.getPrice());
-        this.trader = trader;
+    public EnrichedTrade(Trade trade, String companyNme) {
+        super(trade.getTime(),trade.getSymbol(),trade.getQuantity(), trade.getPrice());
+        this.companyName = companyNme;
     }
 
-    public String getTrader() {
-        return trader;
+    public String getCompanyName() {
+        return companyName;
     }
 
     @Override
     public String toString() {
-        return "Trade{time=" + getTime() + ", trader='" + getTrader() + '\'' + ", quantity=" + getQuantity()
-                + ", price=" + getPrice() + '}';
+        return "Trade{time=" + getTime() + ", company name='" + getCompanyName() + '\''
+                + ", quantity=" + getQuantity() + ", price=" + getPrice() + '}';
     }
 }

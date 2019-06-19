@@ -39,21 +39,27 @@ public class Lab1 {
         // New lines added to this file will be our source data
         final String DIRECTORY = "data/";
 
-        // STEP 1:
-        // Draw using file watcher from the com.hazelcast.jet.pipeline.Sources source library
-        // Hint: it's non-timestamped stream
+        // 1 - Stream new lines into the job
+        // - use drawFrom on your pipeline
+        // - Use fileWatcher source from com.hazelcast.jet.pipeline.Sources
 
-        // Drain to logger using the sink from the library com.hazelcast.jet.pipeline.Sinks;
+        // 2 - Without timestamps - we don't need timestamped stream now
 
-        // Run this pipeline to test it!
+        // 3 - Print results
+        // - Use drainTo on your pipeline
+        // - Use logger sink from com.hazelcast.jet.pipeline.Sinks;
 
-        // STEP 2:
-        // Filter out all lines which are not equal to the string "hello"
+        // 4 - Run this pipeline to test it!
         // Add text lines to the file.
         // Use echo -- some text editors create a new file for every save. That results in replaying the file.
         //
         // echo "hello" >> filename.txt
         // echo "hello world" >> filename.txt
+
+
+        // STEP 2: Filter out all lines which are equal to the string "hello"
+        // use filter() on your pipeline
+        // use lambda to define the predicate
 
         return p;
     }
