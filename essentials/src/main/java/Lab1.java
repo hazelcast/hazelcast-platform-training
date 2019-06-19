@@ -40,7 +40,7 @@ public class Lab1 {
         final String DIRECTORY = "data/";
 
         // 1 - Stream new lines into the job
-        // - use drawTo on your pipeline
+        // - use drawFrom on your pipeline
         // - Use fileWatcher source from com.hazelcast.jet.pipeline.Sources
 
         // 2 - Without timestamps - we don't need timestamped stream now
