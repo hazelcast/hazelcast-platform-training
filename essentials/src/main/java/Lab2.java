@@ -17,10 +17,7 @@
 import com.hazelcast.core.IMap;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
-import com.hazelcast.jet.Job;
 import com.hazelcast.jet.pipeline.Pipeline;
-
-import java.util.Map;
 
 
 public class Lab2 {
@@ -51,7 +48,7 @@ public class Lab2 {
 
         // 1 - Read from the Trade Source (sources.TradeSource) - it's custom source generating Trades (dto.Trade)
 
-        // 2 - Without timestamps
+        // 2 - With native timestamps
 
         // 3 - Convert Trade stream to Enriched Trade stream
         // - Trade (dto.Trade) has a symbol field
