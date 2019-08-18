@@ -18,6 +18,7 @@ import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.pipeline.Pipeline;
+import com.hazelcast.jet.pipeline.Sinks;
 
 public class Lab3 {
 
@@ -38,8 +39,10 @@ public class Lab3 {
         Pipeline p = Pipeline.create();
 
         // 1 - Read from the Trade Source (sources.TradeSource)
+        p.drawFrom(sources.TradeSource.tradeSource())
 
-        // 2 - Without timestamps
+        // 2 - Without timestamps - we don't need timestamped stream now
+        .withoutTimestamps()
 
         // 3 - Compute max rolling price
         // - the max will be updated and emitted with each incoming trade
@@ -47,6 +50,7 @@ public class Lab3 {
         // - use com.hazelcast.jet.function.ComparatorEx library
 
         // 4 - Drain max to logger sink
+        .drainTo(Sinks.logger());
 
         return p;
     }

@@ -18,6 +18,7 @@ import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.pipeline.Pipeline;
+import com.hazelcast.jet.pipeline.Sinks;
 
 public class Lab5 {
 
@@ -38,12 +39,15 @@ public class Lab5 {
         Pipeline p = Pipeline.create();
 
         // 1 - Read from the Trade Source (sources.TradeSource)
+        p.drawFrom(sources.TradeSource.tradeSource(1000))
 
         // 2 - Use Native timestamps, no lag allowed
+        .withNativeTimestamps(0)
 
         // 3 - Compute sum of trades in 3-second intervals for each symbol
 
         // 4 - Drain to logger sink
+        .drainTo(Sinks.logger());
 
         return p;
     }

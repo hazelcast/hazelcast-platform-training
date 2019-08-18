@@ -39,6 +39,7 @@ public class Lab4 {
         Pipeline p = Pipeline.create();
 
         // 1 - Read from the Trade Source (sources.TradeSource)
+        p.drawFrom(sources.TradeSource.tradeSource());
 
         // 2 - Use Native timestamps, no lag allowed
 

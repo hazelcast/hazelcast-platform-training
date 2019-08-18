@@ -48,7 +48,7 @@ public class Lab2 {
 
         // 1 - Read from the Trade Source (sources.TradeSource) - it's custom source generating Trades (dto.Trade)
 
-        // 2 - With native timestamps
+        // 2 - Without timestamps - we don't need timestamped stream now
 
         // 3 - Convert Trade stream to Enriched Trade stream
         // - Trade (dto.Trade) has a symbol field
