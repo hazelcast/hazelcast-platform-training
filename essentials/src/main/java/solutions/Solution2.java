@@ -19,7 +19,6 @@ package solutions;
 import com.hazelcast.core.IMap;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
-import com.hazelcast.jet.Job;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import dto.EnrichedTrade;
@@ -32,8 +31,6 @@ public class Solution2 {
     private static final String LOOKUP_TABLE = "lookup-table" ;
 
     public static void main (String[] args) {
-        Pipeline p = buildPipeline();
-
         JetInstance jet = Jet.newJetInstance();
 
         // symbol -> company name
@@ -42,6 +39,7 @@ public class Solution2 {
         lookupTable.put("GOOGL", "Alphabet Inc.");
         lookupTable.put("MSFT", "Microsoft Corporation");
 
+        Pipeline p = buildPipeline();
         try {
             jet.newJob(p).join();
         } finally {

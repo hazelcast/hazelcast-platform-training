@@ -41,7 +41,7 @@ public class Lab3 {
 
         // 2 - Without timestamps
 
-        // 3 - Compute max rolling price
+        // 3 - Compute max price in a rolling way
         // - the max will be updated and emitted with each incoming trade
         // - use com.hazelcast.jet.aggregate.AggregateOperations library with aggregations
         // - use com.hazelcast.jet.function.ComparatorEx library

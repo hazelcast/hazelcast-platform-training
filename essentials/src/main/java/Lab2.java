@@ -50,7 +50,7 @@ public class Lab2 {
 
         // 2 - With native timestamps
 
-        // 3 - Convert Trade stream to Enriched Trade stream
+        // 3 - Convert Trade stream to EnrichedTrade stream
         // - Trade (dto.Trade) has a symbol field
         // - Use LOOKUP_TABLE to look up full company name based on the symbol
         // - Create new Enriched Trade (dto.EnrichedTrade) using Trade and company name
