@@ -53,7 +53,7 @@ public class Solution2 {
         p.drawFrom(TradeSource.tradeSource())
                 .withNativeTimestamps(0)
                 .mapUsingIMap(LOOKUP_TABLE, Trade::getSymbol,
-                        (trade, companyName) -> new EnrichedTrade(trade, companyName.toString()) )
+                        (Trade trade, String companyName) -> new EnrichedTrade(trade, companyName) )
                 .drainTo(Sinks.logger());
 
         return p;

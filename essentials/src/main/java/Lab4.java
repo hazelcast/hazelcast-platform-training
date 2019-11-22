@@ -18,6 +18,9 @@ import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.pipeline.Pipeline;
+import com.hazelcast.jet.pipeline.SinkStage;
+import com.hazelcast.jet.pipeline.Sinks;
+import sources.TradeSource;
 
 public class Lab4 {
 
@@ -38,22 +41,31 @@ public class Lab4 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        // 1 - Read from the Trade Source (sources.TradeSource)
+        p.drawFrom(TradeSource.tradeSource(1000))
+         .withNativeTimestamps(0)
 
-        // 2 - Use Native timestamps, no lag allowed
+         // STEP 1 - Compute sum of trades for 3-second intervals
+         // - Use 3 sec tumbling windows (defined in WindowDef.tumbling with size 3000
+         // - Sum trade prices
+         // Run the job and inspect the results. Stop the Job before moving to STEP 2.
 
-        // 3 - Compute sum of trades for 3-second intervals
-        //
-        // STEP 3.1
-        // - Use 3 sec tumbling windows (defined in WindowDef.tumbling with size 3000
-        // - Sum trade prices
+         // STEP 2 - Compute sum of trades for 3-second intervals with speculative results every second
+         // - Use early results when defining the window
+         // - Watch the early result flag in the console output
+         // Run the job and inspect the results. Stop the Job before moving to STEP 3.
 
-        // STEP 3.2
-        // - Get speculative results every second
-        // - Use early results when defining the window
-        // - Watch the early result flag in the console output
+         // STEP 3 - Compute sum of trades in last 3-second, updated each second
+         // - Use 3 sec sliding windows with 1 sec step
+         // Run the job and inspect the results. Stop the Job before moving to STEP 4.
 
-        // 4 - Drain to logger sink
+         // STEP 4 - Compute sum of trades in last 3-second for each trading symbol
+         // - Group the stream on the trading symbol
+         // - Use 3 sec sliding windows with 1 sec step
+         // Run the job and inspect the results. Stop the Job before leaving the lab.
+
+
+
+         .drainTo(Sinks.logger());
 
 
         return p;

@@ -19,15 +19,19 @@ package solutions;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Job;
+import com.hazelcast.jet.accumulator.LongAccumulator;
 import com.hazelcast.jet.aggregate.AggregateOperations;
-import com.hazelcast.jet.function.ComparatorEx;
+import com.hazelcast.jet.datamodel.Tuple2;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
-import com.hazelcast.jet.pipeline.StreamStage;
+import com.hazelcast.jet.pipeline.WindowDefinition;
+import com.hazelcast.util.MutableLong;
 import dto.Trade;
 import sources.TradeSource;
 
 public class Solution3 {
+
+    private static final long PRICE_DROP_TRESHOLD = 200;
 
     public static void main(String[] args) {
         Pipeline p = buildPipeline();
@@ -45,11 +49,20 @@ public class Solution3 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        StreamStage<Trade> source = p.drawFrom(TradeSource.tradeSource())
-                .withNativeTimestamps(0);
+        p.drawFrom(TradeSource.tradeSource(1))
+         .withNativeTimestamps(0 )
+         .mapStateful(
+                 () -> MutableLong.valueOf(0),
+                 (previousPrice, currentTrade) -> {
 
-        source.rollingAggregate(AggregateOperations.maxBy(ComparatorEx.comparingInt(trade -> trade.getPrice())))
-                .drainTo(Sinks.logger());
+                     Long difference = previousPrice.value - currentTrade.getPrice();
+                     previousPrice.value = currentTrade.getPrice();
+
+                     return (difference > PRICE_DROP_TRESHOLD) ? difference : null;
+
+                 })
+
+         .drainTo(Sinks.logger( m -> "Price drop: " + m));
 
         return p;
     }

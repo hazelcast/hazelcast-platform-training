@@ -19,9 +19,12 @@ package solutions;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Job;
+import com.hazelcast.jet.aggregate.AggregateOperations;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.SinkStage;
 import com.hazelcast.jet.pipeline.Sinks;
+import com.hazelcast.jet.pipeline.WindowDefinition;
+import dto.Trade;
 import sources.TradeSource;
 
 public class Solution4 {
@@ -44,17 +47,22 @@ public class Solution4 {
 
         SinkStage sinkStage = p.drawFrom(TradeSource.tradeSource(1000))
                 .withNativeTimestamps(0)
-                // Part 1 solution
+                // Step 1 solution
                 // .window(WindowDefinition.tumbling(3000))
                 // .aggregate(AggregateOperations.summingLong(Trade::getPrice))
                 //
-                // Part 2 solution
+                // Step 2 solution
                 // .window(WindowDefinition.tumbling(3000).setEarlyResultsPeriod(1000))
                 // .aggregate(AggregateOperations.summingLong(Trade::getPrice))
                 //
-                // Extra credit solution
-                //.window(WindowDefinition.sliding(3000,1000))
-                //.aggregate(AggregateOperations.summingLong(Trade::getPrice))
+                // Step 3 solution
+                // .window(WindowDefinition.sliding(3000,1000))
+                // .aggregate(AggregateOperations.summingLong(Trade::getPrice)
+                //
+                // Step 4 solution
+                // .groupingKey(Trade::getSymbol)
+                // .window(WindowDefinition.sliding(3000,1000))
+                // .aggregate(AggregateOperations.summingLong(Trade::getPrice))
 
                 .drainTo(Sinks.logger());
 

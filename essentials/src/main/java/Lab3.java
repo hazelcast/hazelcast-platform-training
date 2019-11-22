@@ -17,11 +17,15 @@
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Job;
+import com.hazelcast.jet.accumulator.LongAccumulator;
 import com.hazelcast.jet.pipeline.Pipeline;
+import com.hazelcast.jet.pipeline.Sinks;
+import dto.Trade;
+import sources.TradeSource;
 
 public class Lab3 {
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         Pipeline p = buildPipeline();
 
         JetInstance jet = Jet.newJetInstance();
@@ -37,16 +41,16 @@ public class Lab3 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        // 1 - Read from the Trade Source (sources.TradeSource)
+        p.drawFrom(TradeSource.tradeSource(1))
+         .withNativeTimestamps(0 )
 
-        // 2 - Without timestamps
+         // Detect if price between two consecutive trades drops by more then 200
 
-        // 3 - Compute max price in a rolling way
-        // - the max will be updated and emitted with each incoming trade
-        // - use com.hazelcast.jet.aggregate.AggregateOperations library with aggregations
-        // - use com.hazelcast.jet.function.ComparatorEx library
+         // Use the mapStateful to keep price of previous Trade
+         // - Consider using com.hazelcast.util.MutableLong as a mutable container for long values
+         // - Return the price difference if drop is detected, nothing otherwise
 
-        // 4 - Drain max to logger sink
+         .drainTo(Sinks.logger( m -> "Price drop: " + m));
 
         return p;
     }

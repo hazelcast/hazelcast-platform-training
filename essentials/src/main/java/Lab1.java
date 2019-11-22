@@ -17,6 +17,9 @@
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.pipeline.Pipeline;
+import com.hazelcast.jet.pipeline.Sinks;
+import com.hazelcast.jet.pipeline.StreamSource;
+import com.hazelcast.jet.pipeline.test.TestSources;
 
 public class Lab1 {
 
@@ -35,31 +38,45 @@ public class Lab1 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        // DEFINE THE DATA Directory and create an empty text file in it.
-        // New lines added to this file will be our source data
-        final String DIRECTORY = "data/";
+        // STEP 1: Print a stream to the console
 
-        // 1 - Stream new lines into the job
-        // - use drawFrom on your pipeline
-        // - Use fileWatcher source from com.hazelcast.jet.pipeline.Sources
+        StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> seq);
 
-        // 2 - Without timestamps - we don't need timestamped stream now
+        p.drawFrom(source)
+         .withoutTimestamps()
+         .drainTo(Sinks.logger());
 
-        // 3 - Print results
-        // - Use drainTo on your pipeline
-        // - Use logger sink from com.hazelcast.jet.pipeline.Sinks;
+        // Run the code to see the results in the console
+        // Stop it before continuing to step 2
 
-        // 4 - Run this pipeline to test it!
-        // Add text lines to the file.
-        // Use echo -- some text editors create a new file for every save. That results in replaying the file.
+
+
+        // STEP 2: Filter out odd numbers from the stream
+
+        // Add filter() to  your pipeline
+        // - Use lambda to define the predicate
+
+
+
+        // STEP 3: Process data from a file instead of generated data
+
+        // Create a directory somewhere in your computer and create an empty input.txt file in it
+
+        // Replace itemStream with fileWatcher source from com.hazelcast.jet.pipeline.Sources
+        // - (fileWatcher stream lines added to files in a directory.)
+        // - Adjust source type - the generator was producing Longs, fileWatcher produces Strings
+
+        // Add a mapping step before the filter to convert the stream from Strings to Longs
+
+        // Run this pipeline to test it!
+        // - Add text lines to the file.
+        // - Use echo -- some text editors create a new file for every save. That results in replaying the file.
         //
-        // echo "hello" >> filename.txt
-        // echo "hello world" >> filename.txt
+        // echo "0" >> input.txt
+        // echo "1" >> input.txt
 
+        // Stop the job
 
-        // STEP 2: Filter out all lines which are equal to the string "hello"
-        // use filter() on your pipeline
-        // use lambda to define the predicate
 
         return p;
     }
