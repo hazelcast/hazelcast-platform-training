@@ -50,19 +50,16 @@ public class Solution3 {
         Pipeline p = Pipeline.create();
 
         p.drawFrom(TradeSource.tradeSource(1))
-         .withNativeTimestamps(0 )
-         .mapStateful(
-                 () -> MutableLong.valueOf(0),
+          .withNativeTimestamps(0 )
+          .mapStateful(
+                 LongAccumulator::new,
                  (previousPrice, currentTrade) -> {
-
-                     Long difference = previousPrice.value - currentTrade.getPrice();
-                     previousPrice.value = currentTrade.getPrice();
+                     Long difference = previousPrice.get() - currentTrade.getPrice();
+                     previousPrice.set(currentTrade.getPrice());
 
                      return (difference > PRICE_DROP_TRESHOLD) ? difference : null;
-
                  })
-
-         .drainTo(Sinks.logger( m -> "Price drop: " + m));
+          .drainTo(Sinks.logger( m -> "Price drop: " + m));
 
         return p;
     }
