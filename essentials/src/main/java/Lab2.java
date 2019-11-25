@@ -18,7 +18,10 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.pipeline.Pipeline;
-
+import com.hazelcast.jet.pipeline.Sinks;
+import dto.EnrichedTrade;
+import dto.Trade;
+import sources.TradeSource;
 
 public class Lab2 {
 
@@ -46,16 +49,15 @@ public class Lab2 {
     private static Pipeline buildPipeline(IMap<String, String> lookupTable) {
         Pipeline p = Pipeline.create();
 
-        // 1 - Read from the Trade Source (sources.TradeSource) - it's custom source generating Trades (dto.Trade)
+        p.drawFrom(TradeSource.tradeSource())
+         .withoutTimestamps()
 
-        // 2 - With native timestamps
-
-        // 3 - Convert Trade stream to EnrichedTrade stream
+        // Convert Trade stream to EnrichedTrade stream
         // - Trade (dto.Trade) has a symbol field
         // - Use LOOKUP_TABLE to look up full company name based on the symbol
         // - Create new Enriched Trade (dto.EnrichedTrade) using Trade and company name
 
-        // 4 - Drain to sink
+        .drainTo(Sinks.logger());
 
         return p;
     }

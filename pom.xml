@@ -6,7 +6,7 @@
 
     <groupId>com.hazelcast.jet.training</groupId>
     <artifactId>hazelcast-jet-training</artifactId>
-    <version>3.1</version>
+    <version>3.2</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -18,7 +18,7 @@
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
-        <jet.version>3.1</jet.version>
+        <jet.version>3.2</jet.version>
     </properties>
 
     <repositories>

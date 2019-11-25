@@ -21,6 +21,8 @@ import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
+import com.hazelcast.jet.pipeline.StreamSource;
+import com.hazelcast.jet.pipeline.test.TestSources;
 
 public class Solution1 {
 
@@ -40,10 +42,14 @@ public class Solution1 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.drawFrom(Sources.fileWatcher(DIRECTORY))
-                .withoutTimestamps()
-                .filter(line -> !"hello".equalsIgnoreCase(line))
-                .drainTo(Sinks.logger());
+        StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> seq);
+        // StreamSource<String> source = Sources.fileWatcher(DIRECTORY);
+
+        p.drawFrom(source)
+         .withoutTimestamps()
+         // .map( line-> Long.valueOf(line))
+         .filter(item -> (item % 2) == 0)
+         .drainTo(Sinks.logger());
 
         return p;
     }
