@@ -45,11 +45,11 @@ public class Solution1 {
         StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> seq);
         // StreamSource<String> source = Sources.fileWatcher(DIRECTORY);
 
-        p.drawFrom(source)
+        p.readFrom(source)
          .withoutTimestamps()
          // .map( line-> Long.valueOf(line))
          .filter(item -> (item % 2) == 0)
-         .drainTo(Sinks.logger());
+         .writeTo(Sinks.logger());
 
         return p;
     }

@@ -41,7 +41,7 @@ public class Lab3 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.drawFrom(TradeSource.tradeSource(1))
+        p.readFrom(TradeSource.tradeSource(1))
           .withNativeTimestamps(0 )
 
          // Detect if price between two consecutive trades drops by more than 200
@@ -50,7 +50,7 @@ public class Lab3 {
          // - Consider using com.hazelcast.jet.accumulator.LongAccumulator as a mutable container for long values
          // - Return the price difference if drop is detected, nothing otherwise
 
-         .drainTo(Sinks.logger( m -> "Price drop: " + m));
+         .writeTo(Sinks.logger( m -> "Price drop: " + m));
 
         return p;
     }

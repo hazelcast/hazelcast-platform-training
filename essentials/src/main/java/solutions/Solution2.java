@@ -16,11 +16,11 @@
 
 package solutions;
 
-import com.hazelcast.core.IMap;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
+import com.hazelcast.map.IMap;
 import dto.EnrichedTrade;
 import dto.Trade;
 import sources.TradeSource;
@@ -50,11 +50,11 @@ public class Solution2 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.drawFrom(TradeSource.tradeSource())
+        p.readFrom(TradeSource.tradeSource())
                 .withNativeTimestamps(0)
                 .mapUsingIMap(LOOKUP_TABLE, Trade::getSymbol,
                         (Trade trade, String companyName) -> new EnrichedTrade(trade, companyName) )
-                .drainTo(Sinks.logger());
+                .writeTo(Sinks.logger());
 
         return p;
     }
