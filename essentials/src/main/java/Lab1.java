@@ -42,9 +42,9 @@ public class Lab1 {
 
         StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> seq);
 
-        p.drawFrom(source)
+        p.readFrom(source)
          .withoutTimestamps()
-         .drainTo(Sinks.logger());
+         .writeTo(Sinks.logger());
 
         // Run the code to see the results in the console
         // Stop it before continuing to step 2

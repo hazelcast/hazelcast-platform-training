@@ -22,7 +22,6 @@ import com.hazelcast.jet.config.ProcessingGuarantee;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.WindowDefinition;
-import com.hazelcast.jet.server.JetBootstrap;
 import dto.Trade;
 import sources.TradeSource;
 
@@ -42,7 +41,7 @@ public class TradeAnalysis {
     public static void main(String[] args) {
         Pipeline p = buildPipeline();
 
-        JetInstance jet = JetBootstrap.getInstance();
+        JetInstance jet = Jet.bootstrappedInstance();
 
         try {
             JobConfig jobConfig = new JobConfig()
@@ -59,13 +58,13 @@ public class TradeAnalysis {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.drawFrom(TradeSource.tradeSource(loadTickers(), TRADES_PER_SEC))
+        p.readFrom(TradeSource.tradeSource(loadTickers(), TRADES_PER_SEC))
                 .withNativeTimestamps(0)
                 .groupingKey(Trade::getTicker)
                 .window(WindowDefinition.sliding(60_000, 1_000))
                 .aggregate(AggregateOperations.averagingLong(Trade::getPrice))
                 .map(res -> entry(res.getKey(), res))
-                .drainTo(Sinks.map("prices"));
+                .writeTo(Sinks.map("prices"));
 
         return p;
     }

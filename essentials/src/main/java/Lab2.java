@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.pipeline.Pipeline;
@@ -49,7 +49,7 @@ public class Lab2 {
     private static Pipeline buildPipeline(IMap<String, String> lookupTable) {
         Pipeline p = Pipeline.create();
 
-        p.drawFrom(TradeSource.tradeSource())
+        p.readFrom(TradeSource.tradeSource())
          .withoutTimestamps()
 
         // Convert Trade stream to EnrichedTrade stream
@@ -57,7 +57,7 @@ public class Lab2 {
         // - Use LOOKUP_TABLE to look up full company name based on the symbol
         // - Create new Enriched Trade (dto.EnrichedTrade) using Trade and company name
 
-        .drainTo(Sinks.logger());
+        .writeTo(Sinks.logger());
 
         return p;
     }

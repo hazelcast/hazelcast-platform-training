@@ -15,7 +15,7 @@
  */
 
 import com.hazelcast.core.EntryEvent;
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.datamodel.KeyedWindowResult;
@@ -36,6 +36,7 @@ import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
@@ -50,7 +51,7 @@ public class TradeMonitorGui {
     private static final int WINDOW_Y = 100;
     private static final int WINDOW_WIDTH = 1200;
     private static final int WINDOW_HEIGHT = 650;
-    private String listenerId;
+    private UUID listenerId;
 
     private IMap<String, KeyedWindowResult<String, Double>> avgPrices;
 

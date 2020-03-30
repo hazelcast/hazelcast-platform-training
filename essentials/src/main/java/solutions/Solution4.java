@@ -45,7 +45,7 @@ public class Solution4 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        SinkStage sinkStage = p.drawFrom(TradeSource.tradeSource(1000))
+        SinkStage sinkStage = p.readFrom(TradeSource.tradeSource(1000))
                 .withNativeTimestamps(0)
                 // Step 1 solution
                 // .window(WindowDefinition.tumbling(3000))
@@ -64,7 +64,7 @@ public class Solution4 {
                 // .window(WindowDefinition.sliding(3000,1000))
                 // .aggregate(AggregateOperations.summingLong(Trade::getPrice))
 
-                .drainTo(Sinks.logger());
+                .writeTo(Sinks.logger());
 
         return p;
     }

@@ -41,7 +41,7 @@ public class Lab4 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.drawFrom(TradeSource.tradeSource(1000))
+        p.readFrom(TradeSource.tradeSource(1000))
          .withNativeTimestamps(0)
 
          // STEP 1 - Compute sum of trades for 3-second intervals
@@ -65,7 +65,7 @@ public class Lab4 {
 
 
 
-         .drainTo(Sinks.logger());
+         .writeTo(Sinks.logger());
 
 
         return p;
