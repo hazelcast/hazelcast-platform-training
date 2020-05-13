@@ -14,30 +14,19 @@
  * limitations under the License.
  */
 
-import com.hazelcast.map.IMap;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
-import dto.EnrichedTrade;
-import dto.Trade;
-import sources.TradeSource;
+import com.hazelcast.jet.pipeline.StreamSource;
+import com.hazelcast.jet.pipeline.test.TestSources;
 
 public class Lab2 {
 
-    private static final String LOOKUP_TABLE = "lookup-table";
+    public static void main (String[] args) {
+        Pipeline p = buildPipeline();
 
-    public static void main(String[] args) {
-        JetInstance jet = Jet.newJetInstance();
-
-        // symbol -> company name
-        // random symbols from https://www.nasdaq.com
-        IMap<String, String> lookupTable = jet.getMap(LOOKUP_TABLE);
-        lookupTable.put("AAPL", "Apple Inc. - Common Stock");
-        lookupTable.put("GOOGL", "Alphabet Inc.");
-        lookupTable.put("MSFT", "Microsoft Corporation");
-
-        Pipeline p = buildPipeline(lookupTable);
+        JetInstance jet = Jet.bootstrappedInstance();
 
         try {
             jet.newJob(p).join();
@@ -46,18 +35,43 @@ public class Lab2 {
         }
     }
 
-    private static Pipeline buildPipeline(IMap<String, String> lookupTable) {
+    private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.readFrom(TradeSource.tradeSource())
+        StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> seq);
+
+        p.readFrom(source)
          .withoutTimestamps()
+         .writeTo(Sinks.logger());
 
-        // Convert Trade stream to EnrichedTrade stream
-        // - Trade (dto.Trade) has a symbol field
-        // - Use LOOKUP_TABLE to look up full company name based on the symbol
-        // - Create new Enriched Trade (dto.EnrichedTrade) using Trade and company name
+        // STEP 1: Filter out odd numbers from the stream
 
-        .writeTo(Sinks.logger());
+        // Add filter() to  your pipeline
+        // - Use lambda to define the predicate
+
+        // Stop the job before continuing to Step 2
+
+
+
+        // STEP 2: Process data from a file instead of generated data
+
+        // Create a directory somewhere in your computer and create an empty input.txt file in it
+
+        // Replace itemStream with fileWatcher source from com.hazelcast.jet.pipeline.Sources
+        // - (fileWatcher stream lines added to files in a directory.)
+        // - Adjust source type - the generator was producing Longs, fileWatcher produces Strings
+
+        // Add a mapping step before the filter to convert the stream from Strings to Longs
+
+        // Run this pipeline to test it!
+        // - Add text lines to the file.
+        // - Use echo -- some text editors create a new file for every save. That results in replaying the file.
+        //
+        // echo "0" >> input.txt
+        // echo "1" >> input.txt
+
+        // Stop the job
+
 
         return p;
     }

@@ -20,26 +20,19 @@ import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
-import com.hazelcast.map.IMap;
-import dto.EnrichedTrade;
-import dto.Trade;
-import sources.TradeSource;
-
+import com.hazelcast.jet.pipeline.Sources;
+import com.hazelcast.jet.pipeline.StreamSource;
+import com.hazelcast.jet.pipeline.test.TestSources;
 
 public class Solution2 {
 
-    private static final String LOOKUP_TABLE = "lookup-table" ;
+    private static final String DIRECTORY = "data/";
 
-    public static void main (String[] args) {
-        JetInstance jet = Jet.newJetInstance();
-
-        // symbol -> company name
-        IMap<String, String> lookupTable = jet.getMap(LOOKUP_TABLE);
-        lookupTable.put("AAPL", "Apple Inc. - Common Stock");
-        lookupTable.put("GOOGL", "Alphabet Inc.");
-        lookupTable.put("MSFT", "Microsoft Corporation");
-
+    public static void main(String[] args) {
         Pipeline p = buildPipeline();
+
+        JetInstance jet = Jet.bootstrappedInstance();
+
         try {
             jet.newJob(p).join();
         } finally {
@@ -50,11 +43,14 @@ public class Solution2 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.readFrom(TradeSource.tradeSource())
-                .withNativeTimestamps(0)
-                .mapUsingIMap(LOOKUP_TABLE, Trade::getSymbol,
-                        (Trade trade, String companyName) -> new EnrichedTrade(trade, companyName) )
-                .writeTo(Sinks.logger());
+        StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> seq);
+        // StreamSource<String> source = Sources.fileWatcher(DIRECTORY);
+
+        p.readFrom(source)
+         .withoutTimestamps()
+         // .map( line-> Long.valueOf(line))
+         .filter(item -> (item % 2) == 0)
+         .writeTo(Sinks.logger());
 
         return p;
     }

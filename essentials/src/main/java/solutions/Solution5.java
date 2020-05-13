@@ -14,50 +14,49 @@
  * limitations under the License.
  */
 
+package solutions;
+
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
-import com.hazelcast.jet.Util;
+import com.hazelcast.jet.Job;
+import com.hazelcast.jet.accumulator.LongAccumulator;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
-import eventlisteners.TradeListener;
+import dto.Trade;
 import sources.TradeSource;
 
-public class Lab3 {
+public class Solution5 {
 
-    private static final String LATEST_TRADES_PER_SYMBOL = "trades" ;
+    private static final long PRICE_DROP_TRESHOLD = 200;
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
+        Pipeline p = buildPipeline();
+
         JetInstance jet = Jet.bootstrappedInstance();
 
-        // Subscribe for map events
-        jet.getMap(LATEST_TRADES_PER_SYMBOL).addEntryListener(new TradeListener(), true);
-
-        Pipeline p = buildPipeline();
         try {
-            jet.newJob(p).join();
+            Job job = jet.newJob(p);
+            job.join();
         } finally {
             jet.shutdown();
         }
     }
 
     private static Pipeline buildPipeline() {
-
         Pipeline p = Pipeline.create();
 
-        p.readFrom(TradeSource.tradeSource())
-         .withNativeTimestamps(0);
+        p.readFrom(TradeSource.tradeSource(1))
+          .withNativeTimestamps(0 )
+          .mapStateful(
+                 LongAccumulator::new,
+                 (previousPrice, currentTrade) -> {
+                     Long difference = previousPrice.get() - currentTrade.getPrice();
+                     previousPrice.set(currentTrade.getPrice());
 
-         // Transform Trade events to  map entries with
-         // the Trade symbol as the key and the trade itself as a value
-         // Use Util.entry as an implementation of java.util.Map.Entry
-
-         // .map(trade -> Util.entry( , ))
-
-         // Write the entry stream to LATEST_TRADES_PER_SYMBOL map
-
+                     return (difference > PRICE_DROP_TRESHOLD) ? difference : null;
+                 })
+          .writeTo(Sinks.logger( m -> "Price drop: " + m));
 
         return p;
-        // Stop the job
-
     }
 }

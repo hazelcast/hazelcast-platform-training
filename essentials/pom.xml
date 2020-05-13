@@ -8,7 +8,7 @@
     <parent>
         <artifactId>hazelcast-jet-training</artifactId>
         <groupId>com.hazelcast.jet.training</groupId>
-        <version>4.0</version>
+        <version>4.1</version>
     </parent>
 
 </project>
