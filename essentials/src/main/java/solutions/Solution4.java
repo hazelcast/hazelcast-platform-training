@@ -39,7 +39,7 @@ public class Solution4 {
         lookupTable.put("GOOGL", "Alphabet Inc.");
         lookupTable.put("MSFT", "Microsoft Corporation");
 
-        Pipeline p = buildPipeline();
+        Pipeline p = buildPipeline(lookupTable);
         try {
             jet.newJob(p).join();
         } finally {
@@ -47,13 +47,13 @@ public class Solution4 {
         }
     }
 
-    private static Pipeline buildPipeline() {
+    private static Pipeline buildPipeline(IMap<String, String> lookupTable) {
         Pipeline p = Pipeline.create();
 
         p.readFrom(TradeSource.tradeSource())
                 .withNativeTimestamps(0)
-                .mapUsingIMap(LOOKUP_TABLE, Trade::getSymbol,
-                        (Trade trade, String companyName) -> new EnrichedTrade(trade, companyName) )
+                .mapUsingIMap(lookupTable, Trade::getSymbol,
+                        (trade, companyName) -> new EnrichedTrade(trade, companyName) )
                 .writeTo(Sinks.logger());
 
         return p;
