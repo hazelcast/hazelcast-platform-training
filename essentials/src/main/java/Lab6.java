@@ -17,15 +17,15 @@
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Job;
+import com.hazelcast.jet.accumulator.LongAccumulator;
 import com.hazelcast.jet.pipeline.Pipeline;
-import com.hazelcast.jet.pipeline.SinkStage;
 import com.hazelcast.jet.pipeline.Sinks;
+import dto.Trade;
 import sources.TradeSource;
 
 public class Lab6 {
 
-
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         Pipeline p = buildPipeline();
 
         JetInstance jet = Jet.bootstrappedInstance();
@@ -41,32 +41,16 @@ public class Lab6 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.readFrom(TradeSource.tradeSource(1000))
-         .withNativeTimestamps(0)
+        p.readFrom(TradeSource.tradeSource(1))
+          .withNativeTimestamps(0 )
 
-         // STEP 1 - Compute sum of trades for 3-second intervals
-         // - Use 3 sec tumbling windows (defined in WindowDef.tumbling with size 3000
-         // - Sum trade prices
-         // Run the job and inspect the results. Stop the Job before moving to STEP 2.
+         // Detect if price between two consecutive trades drops by more than 200
 
-         // STEP 2 - Compute sum of trades for 3-second intervals with speculative results every second
-         // - Use early results when defining the window
-         // - Watch the early result flag in the console output
-         // Run the job and inspect the results. Stop the Job before moving to STEP 3.
+         // Use the mapStateful to keep price of previous Trade
+         // - Consider using com.hazelcast.jet.accumulator.LongAccumulator as a mutable container for long values
+         // - Return the price difference if drop is detected, nothing otherwise
 
-         // STEP 3 - Compute sum of trades in last 3-second, updated each second
-         // - Use 3 sec sliding windows with 1 sec step
-         // Run the job and inspect the results. Stop the Job before moving to STEP 4.
-
-         // STEP 4 - Compute sum of trades in last 3-second for each trading symbol
-         // - Group the stream on the trading symbol
-         // - Use 3 sec sliding windows with 1 sec step
-         // Run the job and inspect the results. Stop the Job before leaving the lab.
-
-
-
-         .writeTo(Sinks.logger());
-
+         .writeTo(Sinks.logger( m -> "Price drop: " + m));
 
         return p;
     }
