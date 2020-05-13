@@ -14,59 +14,50 @@
  * limitations under the License.
  */
 
+import com.hazelcast.map.IMap;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
-import com.hazelcast.jet.Job;
 import com.hazelcast.jet.pipeline.Pipeline;
-import com.hazelcast.jet.pipeline.SinkStage;
 import com.hazelcast.jet.pipeline.Sinks;
+import dto.EnrichedTrade;
+import dto.Trade;
 import sources.TradeSource;
 
 public class Lab4 {
 
+    private static final String LOOKUP_TABLE = "lookup-table";
 
-    public static void main (String[] args) {
-        Pipeline p = buildPipeline();
+    public static void main(String[] args) {
+        JetInstance jet = Jet.bootstrappedInstance();
 
-        JetInstance jet = Jet.newJetInstance();
+        // symbol -> company name
+        // random symbols from https://www.nasdaq.com
+        IMap<String, String> lookupTable = jet.getMap(LOOKUP_TABLE);
+        lookupTable.put("AAPL", "Apple Inc. - Common Stock");
+        lookupTable.put("GOOGL", "Alphabet Inc.");
+        lookupTable.put("MSFT", "Microsoft Corporation");
+
+        Pipeline p = buildPipeline(lookupTable);
 
         try {
-            Job job = jet.newJob(p);
-            job.join();
+            jet.newJob(p).join();
         } finally {
             jet.shutdown();
         }
     }
 
-    private static Pipeline buildPipeline() {
+    private static Pipeline buildPipeline(IMap<String, String> lookupTable) {
         Pipeline p = Pipeline.create();
 
-        p.readFrom(TradeSource.tradeSource(1000))
-         .withNativeTimestamps(0)
+        p.readFrom(TradeSource.tradeSource())
+         .withoutTimestamps()
 
-         // STEP 1 - Compute sum of trades for 3-second intervals
-         // - Use 3 sec tumbling windows (defined in WindowDef.tumbling with size 3000
-         // - Sum trade prices
-         // Run the job and inspect the results. Stop the Job before moving to STEP 2.
+        // Convert Trade stream to EnrichedTrade stream
+        // - Trade (dto.Trade) has a symbol field
+        // - Use LOOKUP_TABLE to look up full company name based on the symbol
+        // - Create new Enriched Trade (dto.EnrichedTrade) using Trade and company name
 
-         // STEP 2 - Compute sum of trades for 3-second intervals with speculative results every second
-         // - Use early results when defining the window
-         // - Watch the early result flag in the console output
-         // Run the job and inspect the results. Stop the Job before moving to STEP 3.
-
-         // STEP 3 - Compute sum of trades in last 3-second, updated each second
-         // - Use 3 sec sliding windows with 1 sec step
-         // Run the job and inspect the results. Stop the Job before moving to STEP 4.
-
-         // STEP 4 - Compute sum of trades in last 3-second for each trading symbol
-         // - Group the stream on the trading symbol
-         // - Use 3 sec sliding windows with 1 sec step
-         // Run the job and inspect the results. Stop the Job before leaving the lab.
-
-
-
-         .writeTo(Sinks.logger());
-
+        .writeTo(Sinks.logger());
 
         return p;
     }

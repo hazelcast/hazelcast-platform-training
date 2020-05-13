@@ -18,25 +18,25 @@ package solutions;
 
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
-import com.hazelcast.jet.Job;
-import com.hazelcast.jet.accumulator.LongAccumulator;
+import com.hazelcast.jet.Util;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
-import dto.Trade;
+import eventlisteners.TradeListener;
 import sources.TradeSource;
+
 
 public class Solution3 {
 
-    private static final long PRICE_DROP_TRESHOLD = 200;
+    private static final String LATEST_TRADES_PER_SYMBOL = "trades" ;
 
-    public static void main(String[] args) {
+    public static void main (String[] args) {
+        JetInstance jet = Jet.bootstrappedInstance();
+
+        jet.getMap(LATEST_TRADES_PER_SYMBOL).addEntryListener(new TradeListener(), true);
+
         Pipeline p = buildPipeline();
-
-        JetInstance jet = Jet.newJetInstance();
-
         try {
-            Job job = jet.newJob(p);
-            job.join();
+            jet.newJob(p).join();
         } finally {
             jet.shutdown();
         }
@@ -45,18 +45,13 @@ public class Solution3 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.readFrom(TradeSource.tradeSource(1))
-          .withNativeTimestamps(0 )
-          .mapStateful(
-                 LongAccumulator::new,
-                 (previousPrice, currentTrade) -> {
-                     Long difference = previousPrice.get() - currentTrade.getPrice();
-                     previousPrice.set(currentTrade.getPrice());
-
-                     return (difference > PRICE_DROP_TRESHOLD) ? difference : null;
-                 })
-          .writeTo(Sinks.logger( m -> "Price drop: " + m));
+        p.readFrom(TradeSource.tradeSource())
+         .withNativeTimestamps(0)
+         .map(trade -> Util.entry(trade.getSymbol(), trade))
+         .writeTo(Sinks.map(LATEST_TRADES_PER_SYMBOL));
 
         return p;
     }
+
+
 }

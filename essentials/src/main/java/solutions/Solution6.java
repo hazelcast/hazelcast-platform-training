@@ -18,22 +18,25 @@ package solutions;
 
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.Job;
+import com.hazelcast.jet.accumulator.LongAccumulator;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
-import com.hazelcast.jet.pipeline.Sources;
-import com.hazelcast.jet.pipeline.StreamSource;
-import com.hazelcast.jet.pipeline.test.TestSources;
+import dto.Trade;
+import sources.TradeSource;
 
-public class Solution1 {
+public class Solution6 {
 
-    private static final String DIRECTORY = "data/";
+    private static final long PRICE_DROP_TRESHOLD = 200;
 
     public static void main(String[] args) {
         Pipeline p = buildPipeline();
 
-        JetInstance jet = Jet.newJetInstance();
+        JetInstance jet = Jet.bootstrappedInstance();
+
         try {
-            jet.newJob(p).join();
+            Job job = jet.newJob(p);
+            job.join();
         } finally {
             jet.shutdown();
         }
@@ -42,14 +45,17 @@ public class Solution1 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> seq);
-        // StreamSource<String> source = Sources.fileWatcher(DIRECTORY);
+        p.readFrom(TradeSource.tradeSource(1))
+          .withNativeTimestamps(0 )
+          .mapStateful(
+                 LongAccumulator::new,
+                 (previousPrice, currentTrade) -> {
+                     Long difference = previousPrice.get() - currentTrade.getPrice();
+                     previousPrice.set(currentTrade.getPrice());
 
-        p.readFrom(source)
-         .withoutTimestamps()
-         // .map( line-> Long.valueOf(line))
-         .filter(item -> (item % 2) == 0)
-         .writeTo(Sinks.logger());
+                     return (difference > PRICE_DROP_TRESHOLD) ? difference : null;
+                 })
+          .writeTo(Sinks.logger( m -> "Price drop: " + m));
 
         return p;
     }

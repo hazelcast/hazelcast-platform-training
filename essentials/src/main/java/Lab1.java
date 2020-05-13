@@ -26,7 +26,7 @@ public class Lab1 {
     public static void main (String[] args) {
         Pipeline p = buildPipeline();
 
-        JetInstance jet = Jet.newJetInstance();
+        JetInstance jet = Jet.bootstrappedInstance();
 
         try {
             jet.newJob(p).join();
@@ -38,8 +38,6 @@ public class Lab1 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        // STEP 1: Print a stream to the console
-
         StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> seq);
 
         p.readFrom(source)
@@ -47,36 +45,7 @@ public class Lab1 {
          .writeTo(Sinks.logger());
 
         // Run the code to see the results in the console
-        // Stop it before continuing to step 2
-
-
-
-        // STEP 2: Filter out odd numbers from the stream
-
-        // Add filter() to  your pipeline
-        // - Use lambda to define the predicate
-
-
-
-        // STEP 3: Process data from a file instead of generated data
-
-        // Create a directory somewhere in your computer and create an empty input.txt file in it
-
-        // Replace itemStream with fileWatcher source from com.hazelcast.jet.pipeline.Sources
-        // - (fileWatcher stream lines added to files in a directory.)
-        // - Adjust source type - the generator was producing Longs, fileWatcher produces Strings
-
-        // Add a mapping step before the filter to convert the stream from Strings to Longs
-
-        // Run this pipeline to test it!
-        // - Add text lines to the file.
-        // - Use echo -- some text editors create a new file for every save. That results in replaying the file.
-        //
-        // echo "0" >> input.txt
-        // echo "1" >> input.txt
-
-        // Stop the job
-
+        // Stop it before leaving the lab
 
         return p;
     }

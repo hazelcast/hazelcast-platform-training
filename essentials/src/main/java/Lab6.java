@@ -16,48 +16,42 @@
 
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
-import com.hazelcast.jet.Util;
+import com.hazelcast.jet.Job;
+import com.hazelcast.jet.accumulator.LongAccumulator;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
-import eventlisteners.TradeListener;
+import dto.Trade;
 import sources.TradeSource;
 
-public class Lab3 {
+public class Lab6 {
 
-    private static final String LATEST_TRADES_PER_SYMBOL = "trades" ;
+    public static void main(String[] args) {
+        Pipeline p = buildPipeline();
 
-    public static void main (String[] args) {
         JetInstance jet = Jet.bootstrappedInstance();
 
-        // Subscribe for map events
-        jet.getMap(LATEST_TRADES_PER_SYMBOL).addEntryListener(new TradeListener(), true);
-
-        Pipeline p = buildPipeline();
         try {
-            jet.newJob(p).join();
+            Job job = jet.newJob(p);
+            job.join();
         } finally {
             jet.shutdown();
         }
     }
 
     private static Pipeline buildPipeline() {
-
         Pipeline p = Pipeline.create();
 
-        p.readFrom(TradeSource.tradeSource())
-         .withNativeTimestamps(0);
+        p.readFrom(TradeSource.tradeSource(1))
+          .withNativeTimestamps(0 )
 
-         // Transform Trade events to  map entries with
-         // the Trade symbol as the key and the trade itself as a value
-         // Use Util.entry as an implementation of java.util.Map.Entry
+         // Detect if price between two consecutive trades drops by more than 200
 
-         // .map(trade -> Util.entry( , ))
+         // Use the mapStateful to keep price of previous Trade
+         // - Consider using com.hazelcast.jet.accumulator.LongAccumulator as a mutable container for long values
+         // - Return the price difference if drop is detected, nothing otherwise
 
-         // Write the entry stream to LATEST_TRADES_PER_SYMBOL map
-
+         .writeTo(Sinks.logger( m -> "Price drop: " + m));
 
         return p;
-        // Stop the job
-
     }
 }
