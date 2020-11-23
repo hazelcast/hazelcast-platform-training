@@ -59,8 +59,7 @@ public class Solution2 {
          .withoutTimestamps()
          // .map( line-> Long.valueOf(line))
          .filter(item -> (item % 2) == 0)
-         // .writeTo(Sinks.logger());
-        .writeTo(Sinks.observable(MY_JOB_RESULTS));
+         .writeTo(Sinks.observable(MY_JOB_RESULTS));
 
         return p;
     }
