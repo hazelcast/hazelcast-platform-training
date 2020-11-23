@@ -18,6 +18,7 @@ package solutions;
 
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.Observable;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
@@ -28,10 +29,18 @@ public class Solution2 {
 
     private static final String DIRECTORY = "data/";
 
+    private static final String MY_JOB_RESULTS = "my_job_results";
+
     public static void main(String[] args) {
+
         Pipeline p = buildPipeline();
 
         JetInstance jet = Jet.bootstrappedInstance();
+
+        Observable<Object> observable = jet.getObservable(MY_JOB_RESULTS);
+        observable.addObserver(e -> System.out.println("Printed from client: " + e));
+
+
 
         try {
             jet.newJob(p).join();
@@ -50,7 +59,8 @@ public class Solution2 {
          .withoutTimestamps()
          // .map( line-> Long.valueOf(line))
          .filter(item -> (item % 2) == 0)
-         .writeTo(Sinks.logger());
+         // .writeTo(Sinks.logger());
+        .writeTo(Sinks.observable(MY_JOB_RESULTS));
 
         return p;
     }
