@@ -23,6 +23,7 @@ import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.map.IMap;
 import dto.EnrichedTrade;
 import dto.Trade;
+import eventlisteners.TradeListener;
 import sources.TradeSource;
 
 
@@ -31,10 +32,11 @@ public class Solution4 {
     private static final String LOOKUP_TABLE = "lookup-table" ;
 
     public static void main (String[] args) {
+
         JetInstance jet = Jet.bootstrappedInstance();
 
         // symbol -> company name
-        IMap<String, String> lookupTable = jet.getMap(LOOKUP_TABLE);
+        IMap<String, String> lookupTable = jet.getHazelcastInstance().getMap(LOOKUP_TABLE);
         lookupTable.put("AAPL", "Apple Inc. - Common Stock");
         lookupTable.put("GOOGL", "Alphabet Inc.");
         lookupTable.put("MSFT", "Microsoft Corporation");

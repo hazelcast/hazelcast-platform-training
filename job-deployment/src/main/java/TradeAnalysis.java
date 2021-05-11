@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.aggregate.AggregateOperations;
@@ -51,7 +52,7 @@ public class TradeAnalysis {
 
             jet.newJob(p, jobConfig).join();
         } finally {
-            Jet.shutdownAll();
+            Hazelcast.shutdownAll();
         }
     }
 

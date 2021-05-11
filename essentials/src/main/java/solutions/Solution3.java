@@ -30,11 +30,13 @@ public class Solution3 {
     private static final String LATEST_TRADES_PER_SYMBOL = "trades" ;
 
     public static void main (String[] args) {
+        Pipeline p = buildPipeline();
+
         JetInstance jet = Jet.bootstrappedInstance();
 
-        jet.getMap(LATEST_TRADES_PER_SYMBOL).addEntryListener(new TradeListener(), true);
+        jet.getHazelcastInstance().getMap(LATEST_TRADES_PER_SYMBOL)
+           .addEntryListener(new TradeListener(), true);
 
-        Pipeline p = buildPipeline();
         try {
             jet.newJob(p).join();
         } finally {

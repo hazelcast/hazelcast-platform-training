@@ -40,8 +40,6 @@ public class Solution2 {
         Observable<Object> observable = jet.getObservable(MY_JOB_RESULTS);
         observable.addObserver(e -> System.out.println("Printed from client: " + e));
 
-
-
         try {
             jet.newJob(p).join();
         } finally {
