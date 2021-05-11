@@ -32,7 +32,7 @@ public class Lab4 {
 
         // symbol -> company name
         // random symbols from https://www.nasdaq.com
-        IMap<String, String> lookupTable = jet.getMap(LOOKUP_TABLE);
+        IMap<String, String> lookupTable = jet.getHazelcastInstance().getMap(LOOKUP_TABLE);
         lookupTable.put("AAPL", "Apple Inc. - Common Stock");
         lookupTable.put("GOOGL", "Alphabet Inc.");
         lookupTable.put("MSFT", "Microsoft Corporation");

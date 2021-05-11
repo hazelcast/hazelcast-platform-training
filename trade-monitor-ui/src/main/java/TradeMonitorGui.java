@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.EntryEvent;
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
@@ -125,7 +127,7 @@ public class TradeMonitorGui {
     }
 
     public static void main(String[] args) {
-        JetInstance jet = Jet.newJetClient();
-        new TradeMonitorGui(jet.getMap("prices"));
+        HazelcastInstance hz = HazelcastClient.newHazelcastClient();
+        new TradeMonitorGui(hz.getMap("prices"));
     }
 }
