@@ -1,4 +1,5 @@
 /*
+
  * Copyright (c) 2008-2019, Hazelcast, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +15,8 @@
  * limitations under the License.
  */
 
-import com.hazelcast.jet.Jet;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.StreamSource;
@@ -25,14 +26,9 @@ public class Lab1 {
 
     public static void main (String[] args) {
         Pipeline p = buildPipeline();
+        HazelcastInstance hz = Hazelcast.bootstrappedInstance();
 
-        JetInstance jet = Jet.bootstrappedInstance();
-
-        try {
-            jet.newJob(p).join();
-        } finally {
-            jet.shutdown();
-        }
+        hz.getJet().newJob(p).join();
     }
 
     private static Pipeline buildPipeline() {

@@ -1,9 +1,6 @@
 # Stream Processing Essentials
 
-This repository contains the labs for the Stream Processing Essentials training with [Hazelcast Jet](https://jet-start.sh/).
-
-If you're not attending the instructor-led training session please consider signing-up for the
-[free online training](https://training.hazelcast.com/stream-processing-essentials).
+This repository contains the labs for the [Stream Processing Essentials](https://training.hazelcast.com/stream-processing-essentials) course. 
 
 ## Lab setup
 
@@ -14,6 +11,7 @@ Please clone this GitHub repository to your computer and build it so that Maven 
 ```bash
 mvn clean compile  
 ```
+You also need to download the Hazelcast Platform in order to run CLI commands and Hazelcast Management Center. [Download Hazelcast Platform](https://hazelcast.com/open-source-projects/downloads/)
 
 If you aren't sure regarding your setup please follow the step-by-step guide to prepare the lab environment in your computer from
 the scratch.
@@ -40,12 +38,3 @@ the scratch.
 
 7. Setup the Java SDK to run the labs. Use the Download SDK option unless you have Java 8 or higher installed in your computer.
 
-8. Run Lab 1 to validate your setup.
-
- ![Run Lab1](/images/setup-4.png)
-
-9. You will see the logger output in the `Run` tab.
-
- ![Setup done](/images/setup-5.png)
-
-10. Stop the execution of Lab1

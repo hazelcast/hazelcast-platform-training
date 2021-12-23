@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import com.hazelcast.jet.Jet;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Observable;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
@@ -28,17 +29,14 @@ public class Lab2 {
 
     public static void main (String[] args) {
         Pipeline p = buildPipeline();
+        HazelcastInstance hz = Hazelcast.bootstrappedInstance();
+        JetService jet = hz.getJet();
 
-        JetInstance jet = Jet.bootstrappedInstance();
 
         Observable<Object> observable = jet.getObservable(MY_JOB_RESULTS);
         observable.addObserver(e -> System.out.println("Printed from client: " + e));
 
-        try {
-            jet.newJob(p).join();
-        } finally {
-            jet.shutdown();
-        }
+            hz.getJet().newJob(p).join();
     }
 
     private static Pipeline buildPipeline() {
@@ -76,7 +74,6 @@ public class Lab2 {
         // echo "0" >> input.txt
         // echo "1" >> input.txt
 
-        // Stop the job
 
 
         return p;

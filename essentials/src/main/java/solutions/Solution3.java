@@ -16,8 +16,9 @@
 
 package solutions;
 
-import com.hazelcast.jet.Jet;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Util;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
@@ -32,16 +33,13 @@ public class Solution3 {
     public static void main (String[] args) {
         Pipeline p = buildPipeline();
 
-        JetInstance jet = Jet.bootstrappedInstance();
+        HazelcastInstance hz = Hazelcast.bootstrappedInstance();
+        JetService jet = hz.getJet();
 
-        jet.getHazelcastInstance().getMap(LATEST_TRADES_PER_SYMBOL)
+        hz.getMap(LATEST_TRADES_PER_SYMBOL)
            .addEntryListener(new TradeListener(), true);
 
-        try {
-            jet.newJob(p).join();
-        } finally {
-            jet.shutdown();
-        }
+        hz.getJet().newJob(p).join();
     }
 
     private static Pipeline buildPipeline() {

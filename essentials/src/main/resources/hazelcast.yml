@@ -19,3 +19,6 @@ hazelcast:
         enabled: false
   properties:
     hazelcast.logging.type: log4j
+  jet:
+    enabled: true
+    resource-upload-enabled: true
