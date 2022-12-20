@@ -46,7 +46,6 @@ public class Lab2 {
 
         p.readFrom(source)
          .withoutTimestamps()
-         .writeTo(Sinks.observable(MY_JOB_RESULTS));
 
         // STEP 1: Filter out odd numbers from the stream
 
@@ -75,6 +74,7 @@ public class Lab2 {
         // echo "1" >> input.txt
 
 
+         .writeTo(Sinks.observable(MY_JOB_RESULTS));
 
         return p;
     }
