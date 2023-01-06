@@ -12,14 +12,14 @@ Set up your pipeline to read from sources.TradeSource, using native timestamps a
 
 Run your program and observe the output. You should see an entry in the log every three seconds. 
 
-![Lab 6 Part 1 Output](/images/Lab6Part1Out.png)
+![Lab 6 Part 1 Output](images/Lab6Part1Out.png)
 
 
 ## Part 2: Three second window, results to date every second
 
 Use the same source and sink, and the same aggregate. Change the tumbling window to display early results every second. 
 
-![Lab 6 Part 2 Output](/images/Lab6Part2Out.png)
+![Lab 6 Part 2 Output](images/Lab6Part2Out.png)
 
 The output shows the values increasing within the three second window. Also note the “is early” flag is set for the results “inside” the three second window.
 
@@ -27,7 +27,7 @@ The output shows the values increasing within the three second window. Also note
 
 Use a sliding window with a three second interval, sliding every second. The aggregate is the same.
 
-![Lab 6 Part 3 Output](/images/Lab6Part3Out.png)
+![Lab 6 Part 3 Output](images/Lab6Part3Out.png)
 
 The output shows the overlapping start times.
 
@@ -35,7 +35,7 @@ The output shows the overlapping start times.
 
 Use the grouping API to group events by ticker symbol. Use the windowing API to define the tumbling window and the aggregate operation. 
 
-![Lab 6 Part 4 Output](/images/Lab6Part4Out.png)
+![Lab 6 Part 4 Output](images/Lab6Part4Out.png)
 
 
 ## Ideas for Extra Practice

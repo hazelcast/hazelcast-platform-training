@@ -26,15 +26,15 @@ the scratch.
 
 4. Get New Project from Version control. 
 
- ![Import New Project from Version control.](/images/setup-1.png)
+ ![Import New Project from Version control.](images/setup-1.png)
 
 5. Enter the URL of the repository and Clone it. 
 
- ![Clone the GitHub repository](/images/setup-2.png)
+ ![Clone the GitHub repository](images/setup-2.png)
 
 6. IDEA imported the project. Open `Lab1` file in the `essentials` module 
 
- ![Open Lab1](/images/setup-3.png)
+ ![Open Lab1](images/setup-3.png)
 
 7. Setup the Java SDK to run the labs. Use the Download SDK option unless you have Java 8 or higher installed in your computer.
 

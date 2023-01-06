@@ -17,7 +17,7 @@
 
 3. Run your code. Your output should be similar to what's shown here.
 
-![Output](/images/Lab3Output.png)
+![Output](images/Lab3Output.png)
 
 ## Ideas for Extra Practice
 
