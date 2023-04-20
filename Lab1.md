@@ -20,7 +20,7 @@ You will see the logger output in the `Run` tab.
 
  ![Setup done](/images/setup-5.png)
 
-3. Open a terminal window, navigate to the Haelcast Platform directory, then use `sh management-center/bin/start.sh` to launch Management Center.
+3. Open a terminal window, navigate to the Hazelcast Platform directory, then use `sh management-center/bin/start.sh` to launch Management Center.
 
 4. In your browser, open [localhost:8080](http://localhost:8080).
 

@@ -23,14 +23,13 @@ import sources.TradeSource;
 
 public class Lab6 {
 
-
     public static void main (String[] args) {
         Pipeline p = buildPipeline();
 
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
         JetService jet = hz.getJet();
 
-        hz.getJet().newJob(p).join();
+        jet.newJob(p).join();
     }
 
     private static Pipeline buildPipeline() {

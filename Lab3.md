@@ -13,7 +13,7 @@
 
     Your task is to write a pipeline that takes the stream and writes it to an already-configured in-memory map. Use the stock symbol as the key, and the entire trade as the value. 
 
-2. Before running your code, open `Listeners > TradeListener.java`. A listener executes code in response to specific activity against an in-memory data structure. In this case, we've only written code for two types of events: when a map entry is added, and when a map entry is updated. 
+2. Before running your code, open `EventListeners > TradeListener.java`. A listener executes code in response to specific activity against an in-memory data structure. In this case, we've only written code for two types of events: when a map entry is added, and when a map entry is updated. 
 
 3. Run your code. Your output should be similar to what's shown here.
 

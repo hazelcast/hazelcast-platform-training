@@ -35,7 +35,7 @@ public class Lab3 {
        hz.getMap(LATEST_TRADES_PER_SYMBOL)
            .addEntryListener(new TradeListener(), true);
 
-        hz.getJet().newJob(p).join();
+        jet.newJob(p).join();
     }
 
     private static Pipeline buildPipeline() {
