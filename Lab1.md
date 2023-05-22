@@ -20,13 +20,15 @@ You will see the logger output in the `Run` tab.
 
  ![Setup done](/images/setup-5.png)
 
-3. Open a terminal window, navigate to the Haelcast Platform directory, then use `sh management-center/bin/start.sh` to launch Management Center.
+3. Open a terminal window, navigate to the Hazelcast Platform directory, then use `hz-mc start` to launch Management Center. 
+
+> Note: Make sure you have Hazelcast Management Center installed. Follow this to get it installed. https://docs.hazelcast.com/management-center/5.3/getting-started/install
 
 4. In your browser, open [localhost:8080](http://localhost:8080).
 
 ![Management Center Dashboard](/images/mchome.png)
 
-5. Go to `Streaming > Jobs`. Click on the running job. 
+5. Go to `Stream Processing > Jobs`. Click on the running job. 
 
 ![List of Jobs](/images/mcjoblist.png)
 
