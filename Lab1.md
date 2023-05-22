@@ -22,7 +22,7 @@ You will see the logger output in the `Run` tab.
 
 3. Open a terminal window, navigate to the Hazelcast Platform directory, then use `hz-mc start` to launch Management Center. 
 
-> Note: Make sure you have Hazelcast Management Center installed. Follow this to get it installed. https://docs.hazelcast.com/management-center/5.3/getting-started/install
+> Note: Make sure you have Hazelcast Management Center installed. Follow this to get it installed. https://docs.hazelcast.com/management-center/5.1/getting-started/install
 
 4. In your browser, open [localhost:8080](http://localhost:8080).
 
