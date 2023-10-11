@@ -13,7 +13,7 @@ Use the mapStateful structure to store the price of the previous trade. Then wri
 
 Your output will differ depending the randomly-generated trade data, but you will eventually see price drop output.
 
-![Lab 5 Output](/images/Lab5Output.png)
+![Lab 5 Output](images/Lab5Output.png)
 
 ## Ideas for Extra Practice
 
