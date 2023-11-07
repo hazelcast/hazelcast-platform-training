@@ -13,13 +13,13 @@
 
 1. Run the code provided in the Lab2.java file. You should see output similar to this in the `Run` window. 
 
-![Lab 2 Step 1 output](/images/Lab2Step1.png)
+![Lab 2 Step 1 output](images/Lab2Step1.png)
 
 ### Part 2 - Filter for Even Numbers
 
 1. Add a filter so that odd numbers are not displayed.
 
-![Lab 2 Step 2 output](/images/Lab2Step2.png)
+![Lab 2 Step 2 output](images/Lab2Step2.png)
 
 ### Part 3 - Read from a File in Real Time
 
@@ -35,11 +35,11 @@
 
 6. To test it, go back to your terminal window. Use `echo “some number” >> filename.txt` to add lines to the data file. 
 
-![Input](/images/Lab2Part3Input.png)
+![Input](images/Lab2Part3Input.png)
 
 You should see all your input being echoed to the console.
 
-![Output](/images/Lab2Part3Output.png)
+![Output](images/Lab2Part3Output.png)
 
  ### Extra Practice
 
