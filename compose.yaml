@@ -1,0 +1,12 @@
+services:
+  hazelcast:
+    image: hazelcast/hazelcast:latest
+    ports:
+    - "5701:5701"
+  management-center:
+    image: hazelcast/management-center:latest
+    ports:
+    - "8080:8080"
+    environment:
+    - MC_DEFAULT_CLUSTER=dev
+    - MC_DEFAULT_CLUSTER_MEMBERS=hazelcast
