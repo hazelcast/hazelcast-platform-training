@@ -4,7 +4,7 @@ This repository contains the labs for the [Stream Processing Essentials](https:/
 
 ## Lab setup
 
-The Labs are available as a Maven project and require Java 8 JDK or higher and Maven installed in your computer. 
+The Labs are available as a Maven project and requires Java 17 JDK or higher and Maven installed in your computer. 
 
 Please clone this GitHub repository to your computer and build it so that Maven downloads the dependencies.
 
