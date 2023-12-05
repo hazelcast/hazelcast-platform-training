@@ -1,4 +1,6 @@
-# Lab 7 - Deploying to Production
+# Lab 7 - Deploying Your Pipeline
+
+
 
 ## Objectives 
 * Use CLC to deploy a compiled JAR to a Hazelcast cluster

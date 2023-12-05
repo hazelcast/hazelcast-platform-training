@@ -1,4 +1,4 @@
-# Lab 2 - Transforming a Data Stream
+# Lab 2 - Basic Data Transcormations
 ## Objectives
 
 * Run pipeline that prints a stream to the console.

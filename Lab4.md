@@ -1,4 +1,4 @@
-# Lab 4 - Enriching the Stream
+# Lab 4 - Enriching the Event Stream
 
 ## Objectives
 * Enrich the streaming data with the company name information.

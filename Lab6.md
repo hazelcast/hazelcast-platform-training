@@ -1,4 +1,4 @@
-# Lab 6 - Windowing and Grouping
+# Lab 6 - Windows, Aggregation and Grouping
 
 ## Objectives 
 * Compute sum of trades in three second windows.

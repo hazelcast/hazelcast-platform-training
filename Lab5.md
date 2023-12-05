@@ -1,4 +1,4 @@
-# Lab 5 - Stateful Processing
+# Lab 5 - Enriching the Event Stream
 
 ## Objectives
 * Detect if price between two consecutive trades drops by more then 200.
