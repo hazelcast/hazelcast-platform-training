@@ -22,6 +22,8 @@ import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.StreamSource;
 import com.hazelcast.jet.pipeline.test.TestSources;
 
+import java.util.Random;
+
 public class Lab1 {
 
     public static void main (String[] args) {
@@ -34,10 +36,10 @@ public class Lab1 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> seq);
+        StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> seq );
 
         p.readFrom(source)
-         .withoutTimestamps()
+         .withNativeTimestamps(1000)
          .writeTo(Sinks.logger());
 
         // Run the code to see the results in the console

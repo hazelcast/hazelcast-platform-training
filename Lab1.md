@@ -1,10 +1,15 @@
 # Lab 1 - The Lab Environment
 
+In this lab you will validate that your lab environment is set up 
+correctly.  You will also learn how to run an embedded Hazelcast instance 
+for development and monitor it with the Hazelcast Management Center and 
+the Command Line Client (CLC)
+
 ## Objectives 
 
 * Validate lab environment
 * Use Management Center to manage and monitor job
-* Use Hazelcast CLI to manage and monitor job
+* Use Hazelcast CLC to manage and monitor job
 
 ## Instructions 
 

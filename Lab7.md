@@ -1,6 +1,6 @@
 # Lab 7 - Deploying Your Pipeline
 
-
+Include Observable 
 
 ## Objectives 
 * Use CLC to deploy a compiled JAR to a Hazelcast cluster

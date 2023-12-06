@@ -16,65 +16,44 @@
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetService;
-import com.hazelcast.jet.Observable;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.StreamSource;
+import com.hazelcast.jet.pipeline.StreamStage;
 import com.hazelcast.jet.pipeline.test.TestSources;
 
 public class Lab2 {
 
-    private static final String MY_JOB_RESULTS = "my_job_results";
+    public static void main(String[] args) {
 
-    public static void main (String[] args) {
         Pipeline p = buildPipeline();
+
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-        JetService jet = hz.getJet();
 
+        hz.getJet().newJob(p).join();
 
-        Observable<Object> observable = jet.getObservable(MY_JOB_RESULTS);
-        observable.addObserver(e -> System.out.println("Printed from client: " + e));
-
-            hz.getJet().newJob(p).join();
     }
 
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> seq);
+        // generate pseudo-random Fahrenheit temperatures in the 0-99 range
+        StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> (ts*ts - seq*seq) % 100 );
 
-        p.readFrom(source)
-         .withoutTimestamps()
+        StreamStage<Long> fahrenheitTemps = p.readFrom(source).withoutTimestamps();
 
-        // STEP 1: Filter out odd numbers from the stream
-
-        // Add filter() to  your pipeline
-        // - Use lambda to define the predicate
-
-        // Stop the job before continuing to Step 2
+        // STEP 1 - add a "map" step to the pipeline that converts the Fahrenheit temperatures to Celsius
+        // calculate Celsius from Fahrenheit using (f - 32) * .555
+        StreamStage<Double> celsiusTemps = null;
 
 
+        // STEP 2 - add a "filter" step to the pipeline that keeps only the  temperatures that are < 0
+        StreamStage<Double> negativeCelsiusTemps = null;
 
-        // STEP 2: Process data from a file instead of generated data
-
-        // Create a directory somewhere in your computer and create an empty input.txt file in it
-
-        // Replace itemStream with fileWatcher source from com.hazelcast.jet.pipeline.Sources
-        // - (fileWatcher stream lines added to files in a directory.)
-        // - Adjust source type - the generator was producing Longs, fileWatcher produces Strings
-
-        // Add a mapping step before the filter to convert the stream from Strings to Longs
-
-        // Run this pipeline to test it!
-        // - Add text lines to the file.
-        // - Use echo -- some text editors create a new file for every save. That results in replaying the file.
-        //
-        // echo "0" >> input.txt
-        // echo "1" >> input.txt
-
-
-         .writeTo(Sinks.observable(MY_JOB_RESULTS));
+        // STEP 3 - write the negative Celsius temperatures to a log
+        // See https://docs.hazelcast.org/docs/latest/javadoc?com/hazelcast/jet/pipeline/Sinks.html
+        // for a list of pre-built Sinks
+        negativeCelsiusTemps.writeTo(null);
 
         return p;
     }

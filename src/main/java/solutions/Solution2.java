@@ -18,28 +18,19 @@ package solutions;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetService;
-import com.hazelcast.jet.Observable;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.StreamSource;
+import com.hazelcast.jet.pipeline.StreamStage;
 import com.hazelcast.jet.pipeline.test.TestSources;
 
 public class Solution2 {
-
-    private static final String DIRECTORY = "data/";
-
-    private static final String MY_JOB_RESULTS = "my_job_results";
 
     public static void main(String[] args) {
 
         Pipeline p = buildPipeline();
 
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-        JetService jet = hz.getJet();
-
-        Observable<Object> observable = jet.getObservable(MY_JOB_RESULTS);
-        observable.addObserver(e -> System.out.println("Printed from client: " + e));
 
         hz.getJet().newJob(p).join();
 
@@ -48,14 +39,18 @@ public class Solution2 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> seq);
-        // StreamSource<String> source = Sources.fileWatcher(DIRECTORY);
+        // generate pseudo-random Fahrenheit temperatures in the 0-99 range
+        StreamSource<Long> source = TestSources.itemStream(1, (ts, seq) -> (ts*ts - seq*seq) % 100 );
 
-        p.readFrom(source)
-         .withoutTimestamps()
-         // .map( line-> Long.valueOf(line))
-         .filter(item -> (item % 2) == 0)
-         .writeTo(Sinks.observable(MY_JOB_RESULTS));
+        StreamStage<Long> fahrenheitTemps = p.readFrom(source).withoutTimestamps();
+
+        // calculate Celsius from Fahrenheit using (f - 32) * .555
+        StreamStage<Double> celsiusTemps = fahrenheitTemps.map(temp -> (temp - 32) * .555);
+
+        // filter out temperatures >= 0
+        StreamStage<Double> negativeCelsiusTemps = celsiusTemps.filter(temp -> (temp < 0));
+
+        negativeCelsiusTemps.writeTo(Sinks.logger());
 
         return p;
     }
