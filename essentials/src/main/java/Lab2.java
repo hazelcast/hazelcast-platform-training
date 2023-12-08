@@ -36,7 +36,7 @@ public class Lab2 {
         Observable<Object> observable = jet.getObservable(MY_JOB_RESULTS);
         observable.addObserver(e -> System.out.println("Printed from client: " + e));
 
-            hz.getJet().newJob(p).join();
+        jet.newJob(p).join();
     }
 
     private static Pipeline buildPipeline() {

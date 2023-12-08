@@ -14,36 +14,32 @@
  * limitations under the License.
  */
 
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.map.IMap;
-import com.hazelcast.jet.Jet;
-import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
-import dto.EnrichedTrade;
-import dto.Trade;
 import sources.TradeSource;
 
 public class Lab4 {
 
     private static final String LOOKUP_TABLE = "lookup-table";
 
-    public static void main(String[] args) {
-        JetInstance jet = Jet.bootstrappedInstance();
+    public static void main (String[] args) {
+        HazelcastInstance hz = Hazelcast.bootstrappedInstance();
+        JetService jet = hz.getJet();
 
         // symbol -> company name
         // random symbols from https://www.nasdaq.com
-        IMap<String, String> lookupTable = jet.getHazelcastInstance().getMap(LOOKUP_TABLE);
+        IMap<String, String> lookupTable = hz.getMap(LOOKUP_TABLE);
         lookupTable.put("AAPL", "Apple Inc. - Common Stock");
         lookupTable.put("GOOGL", "Alphabet Inc.");
         lookupTable.put("MSFT", "Microsoft Corporation");
 
         Pipeline p = buildPipeline(lookupTable);
 
-        try {
-            jet.newJob(p).join();
-        } finally {
-            jet.shutdown();
-        }
+        jet.newJob(p).join();
     }
 
     private static Pipeline buildPipeline(IMap<String, String> lookupTable) {

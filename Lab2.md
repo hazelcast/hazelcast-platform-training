@@ -35,7 +35,7 @@
 
 6. To test it, go back to your terminal window. Use `echo “some number” >> filename.txt` to add lines to the data file. 
 
-![Input](images/Lab2Part3input.png)
+![Input](images/Lab2Part3Input.png)
 
 You should see all your input being echoed to the console.
 
