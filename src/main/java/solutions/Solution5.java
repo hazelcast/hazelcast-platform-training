@@ -40,17 +40,17 @@ public class Solution5 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.readFrom(TradeSource.tradeSource(1))
-          .withNativeTimestamps(0 )
-          .mapStateful(
-                 LongAccumulator::new,
-                 (previousPrice, currentTrade) -> {
-                     Long difference = previousPrice.get() - currentTrade.getPrice();
-                     previousPrice.set(currentTrade.getPrice());
-
-                     return (difference > PRICE_DROP_TRESHOLD) ? difference : null;
-                 })
-          .writeTo(Sinks.logger( m -> "Price drop: " + m));
+//        p.readFrom(TradeSource.tradeSource(1))
+//          .withNativeTimestamps(0 )
+//          .mapStateful(
+//                 LongAccumulator::new,
+//                 (previousPrice, currentTrade) -> {
+//                     Long difference = previousPrice.get() - currentTrade.getPrice();
+//                     previousPrice.set(currentTrade.getPrice());
+//
+//                     return (difference > PRICE_DROP_TRESHOLD) ? difference : null;
+//                 })
+//          .writeTo(Sinks.logger( m -> "Price drop: " + m));
 
         return p;
     }

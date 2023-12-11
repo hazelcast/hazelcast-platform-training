@@ -51,11 +51,11 @@ public class Solution4 {
     private static Pipeline buildPipeline(IMap<String, String> lookupTable) {
         Pipeline p = Pipeline.create();
 
-        p.readFrom(TradeSource.tradeSource())
-                .withNativeTimestamps(0)
-                .mapUsingIMap(lookupTable, Trade::getSymbol,
-                        (trade, companyName) -> new EnrichedTrade(trade, companyName) )
-                .writeTo(Sinks.logger());
+//        p.readFrom(TradeSource.tradeSource())
+//                .withNativeTimestamps(0)
+//                .mapUsingIMap(lookupTable, Trade::getSymbol,
+//                        (trade, companyName) -> new EnrichedTrade(trade, companyName) )
+//                .writeTo(Sinks.logger());
 
         return p;
     }

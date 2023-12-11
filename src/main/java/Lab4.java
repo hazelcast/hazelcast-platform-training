@@ -49,15 +49,15 @@ public class Lab4 {
     private static Pipeline buildPipeline(IMap<String, String> lookupTable) {
         Pipeline p = Pipeline.create();
 
-        p.readFrom(TradeSource.tradeSource())
-         .withoutTimestamps()
+//        p.readFrom(TradeSource.tradeSource())
+//         .withoutTimestamps()
 
         // Convert Trade stream to EnrichedTrade stream
         // - Trade (dto.Trade) has a symbol field
         // - Use LOOKUP_TABLE to look up full company name based on the symbol
         // - Create new Enriched Trade (dto.EnrichedTrade) using Trade and company name
 
-        .writeTo(Sinks.logger());
+//        .writeTo(Sinks.logger());
 
         return p;
     }

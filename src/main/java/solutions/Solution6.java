@@ -42,8 +42,8 @@ public class Solution6 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        SinkStage sinkStage = p.readFrom(TradeSource.tradeSource(1000))
-                .withNativeTimestamps(0)
+//        SinkStage sinkStage = p.readFrom(TradeSource.tradeSource(1000))
+//                .withNativeTimestamps(0)
                 // Part 1 solution
                 // .window(WindowDefinition.tumbling(3000))
                 // .aggregate(AggregateOperations.summingLong(Trade::getPrice))
@@ -57,11 +57,11 @@ public class Solution6 {
                 // .aggregate(AggregateOperations.summingLong(Trade::getPrice))
                 //
                 // Part 4 solution
-                 .groupingKey(Trade::getSymbol)
-                 .window(WindowDefinition.sliding(3000,1000))
-                 .aggregate(AggregateOperations.summingLong(Trade::getPrice))
-
-                .writeTo(Sinks.logger());
+//                 .groupingKey(Trade::getSymbol)
+//                 .window(WindowDefinition.sliding(3000,1000))
+//                 .aggregate(AggregateOperations.summingLong(Trade::getPrice))
+//
+//                .writeTo(Sinks.logger());
 
         return p;
     }

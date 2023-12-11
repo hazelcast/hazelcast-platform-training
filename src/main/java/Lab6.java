@@ -36,8 +36,8 @@ public class Lab6 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.readFrom(TradeSource.tradeSource(1000))
-         .withNativeTimestamps(0)
+//        p.readFrom(TradeSource.tradeSource(1000))
+//         .withNativeTimestamps(0)
 
          // Part 1 - Compute sum of trades for 3-second intervals
          // - Use 3 sec tumbling windows (defined in WindowDef.tumbling with size 3000
@@ -60,7 +60,7 @@ public class Lab6 {
 
 
 
-         .writeTo(Sinks.logger());
+//         .writeTo(Sinks.logger());
 
 
         return p;
