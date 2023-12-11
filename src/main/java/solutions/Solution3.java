@@ -43,8 +43,6 @@ public class Solution3 {
     private static final int EVENT_JOURNAL_CAPACITY = 24 * 3600;
 
     public static void main (String[] args) {
-        Pipeline p = buildPipeline();
-
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
 
         // configure the input map to have an event journal
@@ -63,6 +61,7 @@ public class Solution3 {
         executorService.scheduleAtFixedRate(new TradeSource(inputMap),0,1, TimeUnit.SECONDS);
 
         // start a pipeline to move data between the two
+        Pipeline p = buildPipeline();
         hz.getJet().newJob(p);
     }
 

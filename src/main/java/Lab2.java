@@ -30,7 +30,7 @@ public class Lab2 {
 
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
 
-        hz.getJet().newJob(p).join();
+        hz.getJet().newJob(p);
 
     }
 
@@ -42,15 +42,15 @@ public class Lab2 {
 
         StreamStage<Long> fahrenheitTemps = p.readFrom(source).withoutTimestamps();
 
-        // STEP 1 - add a "map" step to the pipeline that converts the Fahrenheit temperatures to Celsius
+        // TODO: add a "map" step to the pipeline that converts the Fahrenheit temperatures to Celsius
         // calculate Celsius from Fahrenheit using (f - 32) * .555
         StreamStage<Double> celsiusTemps = null;
 
 
-        // STEP 2 - add a "filter" step to the pipeline that keeps only the  temperatures that are < 0
+        // TODO: add a "filter" step to the pipeline that keeps only the  temperatures that are < 0
         StreamStage<Double> negativeCelsiusTemps = null;
 
-        // STEP 3 - write the negative Celsius temperatures to a log
+        // TODO: write the negative Celsius temperatures to a log
         // See https://docs.hazelcast.org/docs/latest/javadoc?com/hazelcast/jet/pipeline/Sinks.html
         // for a list of pre-built Sinks
         negativeCelsiusTemps.writeTo(null);

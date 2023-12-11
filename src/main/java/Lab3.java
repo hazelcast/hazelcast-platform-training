@@ -67,15 +67,15 @@ public class Lab3 {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        // read events from the INPUT_MAP map journal, starting from the oldest.
+        // TODO: read events from the INPUT_MAP map journal, starting from the oldest.
         // use the timestamp in the event and allow 5000ms for late arrivals
         StreamStage<Map.Entry<Integer, Trade>> trades = null;
 
-        // map the Map.Entry<Integer, Trade> with sequence number key to a Tuple2<String,Trade>
+        // TODO: map the Map.Entry<Integer, Trade> with sequence number key to a Tuple2<String,Trade>
         // with symbol key
         StreamStage<Tuple2<String, Trade>> tradesBySymbol = null;
 
-        // write the result to the output map
+        // TODO: write the result to the output map
 
         return p;
     }

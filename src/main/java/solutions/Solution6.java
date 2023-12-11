@@ -35,7 +35,7 @@ public class Solution6 {
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
         JetService jet = hz.getJet();
 
-        hz.getJet().newJob(p).join();
+        hz.getJet().newJob(p);
 
     }
 

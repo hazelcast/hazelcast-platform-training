@@ -32,7 +32,7 @@ public class Solution2 {
 
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
 
-        hz.getJet().newJob(p).join();
+        hz.getJet().newJob(p);
 
     }
 

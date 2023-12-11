@@ -30,7 +30,7 @@ public class Lab1 {
         Pipeline p = buildPipeline();
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
 
-        hz.getJet().newJob(p).join();
+        hz.getJet().newJob(p);
     }
 
     private static Pipeline buildPipeline() {
