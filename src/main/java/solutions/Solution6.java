@@ -16,52 +16,62 @@
 
 package solutions;
 
+import com.hazelcast.config.EventJournalConfig;
+import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.aggregate.AggregateOperations;
-import com.hazelcast.jet.pipeline.Pipeline;
-import com.hazelcast.jet.pipeline.SinkStage;
-import com.hazelcast.jet.pipeline.Sinks;
-import com.hazelcast.jet.pipeline.WindowDefinition;
+import com.hazelcast.jet.pipeline.*;
+import com.hazelcast.map.IMap;
 import dto.Trade;
 import sources.TradeSource;
 
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class Solution6 {
 
-    public static void main(String[] args) {
-        Pipeline p = buildPipeline();
+    private static final String INPUT_MAP = "trades";
+
+    // assuming a 1 tps input event rate, we will configure the event journal to hold 24 hours of events
+    // after that time, the older events will be lost
+    private static final int EVENT_JOURNAL_CAPACITY = 24 * 3600;
+
+    public static void main (String[] args) {
 
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-        JetService jet = hz.getJet();
 
+        // configure the input map to have an event journal
+        EventJournalConfig eventJournalConfig =
+                new EventJournalConfig().setEnabled(true).setCapacity(EVENT_JOURNAL_CAPACITY);
+        MapConfig inputMapConfig = new MapConfig().setName(INPUT_MAP).setEventJournalConfig(eventJournalConfig);
+        hz.getConfig().addMapConfig(inputMapConfig);
+
+        // start sending trades to the input map
+        IMap<Integer, Trade> inputMap = hz.getMap(INPUT_MAP);
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(new TradeSource(inputMap),0,1, TimeUnit.SECONDS);
+
+        Pipeline p = buildPipeline();
         hz.getJet().newJob(p);
-
     }
 
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-//        SinkStage sinkStage = p.readFrom(TradeSource.tradeSource(1000))
-//                .withNativeTimestamps(0)
-                // Part 1 solution
-                // .window(WindowDefinition.tumbling(3000))
-                // .aggregate(AggregateOperations.summingLong(Trade::getPrice))
-                //
-                // Part 2 solution
-                // .window(WindowDefinition.tumbling(3000).setEarlyResultsPeriod(1000))
-                // .aggregate(AggregateOperations.summingLong(Trade::getPrice))
-                //
-                // Part 3 solution
-                // .window(WindowDefinition.sliding(3000,1000))
-                // .aggregate(AggregateOperations.summingLong(Trade::getPrice))
-                //
-                // Part 4 solution
-//                 .groupingKey(Trade::getSymbol)
-//                 .window(WindowDefinition.sliding(3000,1000))
-//                 .aggregate(AggregateOperations.summingLong(Trade::getPrice))
-//
-//                .writeTo(Sinks.logger());
+        // read events from the INPUT_MAP map journal, starting from the oldest.
+        // use the timestamp in the event and allow 5000ms for late arrivals
+        StreamStage<Map.Entry<Integer, Trade>> tradeEntries =
+                p.readFrom(Sources.<Integer, Trade>mapJournal(INPUT_MAP, JournalInitialPosition.START_FROM_OLDEST))
+                        .withTimestamps(entry -> entry.getValue().getTime(), 5000);
+
+        // compute trade volume by symbol in 3s tumbling windows
+        tradeEntries.groupingKey(entry -> entry.getValue().getSymbol())
+                .window(WindowDefinition.tumbling(3000).setEarlyResultsPeriod(1000))
+                .aggregate(AggregateOperations.summingLong(entry -> entry.getValue().getQuantity()))
+                .writeTo(Sinks.logger());
 
         return p;
     }

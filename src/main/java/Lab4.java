@@ -20,8 +20,6 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.pipeline.*;
 import com.hazelcast.map.IMap;
-import com.hazelcast.jet.Jet;
-import com.hazelcast.jet.JetInstance;
 import dto.EnrichedTrade;
 import dto.Trade;
 import sources.TradeSource;

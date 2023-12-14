@@ -32,8 +32,8 @@ public class TradeSource implements Runnable {
         rnd = new Random();
     }
 
-    private IMap<Integer, Trade> map;
-    private Random rnd;
+    private final IMap<Integer, Trade> map;
+    private final Random rnd;
     private int tradeId = 1001;
 
     @Override

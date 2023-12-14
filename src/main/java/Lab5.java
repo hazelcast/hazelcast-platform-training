@@ -18,8 +18,6 @@ import com.hazelcast.config.EventJournalConfig;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetService;
-import com.hazelcast.jet.accumulator.LongAccumulator;
 import com.hazelcast.jet.datamodel.Tuple4;
 import com.hazelcast.jet.pipeline.*;
 import com.hazelcast.map.IMap;

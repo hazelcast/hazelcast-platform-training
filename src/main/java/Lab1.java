@@ -22,8 +22,6 @@ import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.StreamSource;
 import com.hazelcast.jet.pipeline.test.TestSources;
 
-import java.util.Random;
-
 public class Lab1 {
 
     public static void main (String[] args) {
