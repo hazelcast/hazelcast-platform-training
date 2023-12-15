@@ -43,7 +43,7 @@ to your local cluster.
 clc config add local cluster.name=dev cluster.address=localhost:5701
 ```
 
-> __NOTE:__ This configuration persists.  You will be able to use the same configuration for labs 1-6
+> __NOTE:__ This configuration persists.  You will be able to use the same configuration for the other labs.
 
 ### 4. Use CLC to View and Control Running Jobs
 

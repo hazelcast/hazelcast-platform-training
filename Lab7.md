@@ -1,9 +1,42 @@
 # Lab 7 - Deploying Your Pipeline
 
-Include Observable 
+So far, all the labs have been run in embedded mode, which is convenient for development 
+but typically, a Hazelcast cluster will already be running, and you will need to deploy 
+your job to it.  Deploying to a remote cluster introduces some new complications that 
+you will need to understand.  That is the subject of this lesson.
 
 ## Objectives 
-* Use CLC to deploy a compiled JAR to a Hazelcast cluster
+* Package your job for deployment to a remote cluster.
+* Write a client that submits a job.
+* Stream results from a job back to the client that submitted it.
+* Submit a job using the Hazelcast CLC
+
+## Instructions
+
+#### 1. Start a remote cluster
+Before beginning, run `mvn clean package`.
+
+For the purpose of this lab, we will use Docker to run a "remote" cluster.
+
+`docker compose up -d`
+
+Navigate to http://localhost:8080 in your browser and verify that you can access 
+Hazelcast Management Center.  Use management center to verify that there is a 2 node 
+cluster.
+
+> __NOTE:__ it may take a minute or so for Management Center to see both cluster members.
+
+#### 2. Package your job for deployment
+
+The best way to package your job for deployment to a remote cluster is using an "uber jar" 
+created by the maven shade plugin.
+
+However, there are a couple of important caveats: 
+- classes with package names beginning with `com.hazelcast` cannot be deployed in a job
+- the `com.hazelcast` classes are already available on the Hazelcast cluster, so do not to 
+include them in your jar file
+
+
 
 ## Part 1: Set Up Environment
 
@@ -54,3 +87,4 @@ clc -c <your cluster> job list
 6. Go to Stream Processing > Jobs, then open the detailed view of your job.
 
 (what are we looking for/at? Any potential problems we can identify here?)
+

@@ -16,12 +16,20 @@
 
 package sources;
 
+import com.hazelcast.client.HazelcastClient;
+import com.hazelcast.config.EventJournalConfig;
+import com.hazelcast.config.MapConfig;
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import dto.Trade;
+import eventlisteners.TradeListener;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class TradeSource implements Runnable {
 
@@ -44,5 +52,28 @@ public class TradeSource implements Runnable {
         int price = rnd.nextInt(5000);
         Trade trade = new Trade(tradeTime, ticker, quantity, price);
         map.put(tradeId++, trade);
+    }
+
+    // assuming a 1 tps input event rate, we will configure the event journal to hold 24 hours of events
+    // after that time, the older events will be lost
+    private static final int EVENT_JOURNAL_CAPACITY = 24 * 3600;
+    private static final String INPUT_MAP = "trades";
+
+    public static void main(String []args){
+        HazelcastInstance hz = HazelcastClient.newHazelcastClient(); // use default configuration mechanism
+
+        // configure the input map to have an event journal
+        // note that we are configuring the map journal on the server even though hz is a client
+        EventJournalConfig eventJournalConfig =
+                new EventJournalConfig().setEnabled(true).setCapacity(EVENT_JOURNAL_CAPACITY);
+        MapConfig inputMapConfig = new MapConfig().setName(INPUT_MAP).setEventJournalConfig(eventJournalConfig);
+        hz.getConfig().addMapConfig(inputMapConfig);
+
+        // start sending trades to the input map
+        IMap<Integer, Trade> inputMap = hz.getMap(INPUT_MAP);
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(new TradeSource(inputMap),0,1, TimeUnit.SECONDS);
+
+        // the program will not exit because both the Hazelcast client and the ScheduledExecutor have daemon threads
     }
 }

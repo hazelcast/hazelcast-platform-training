@@ -60,3 +60,14 @@ Some sample output is shown below.
 15
 ```
 
+## Additional Notes
+
+You can run _Management Center_ with
+
+`docker run -d -p 8080:8080 hazelcast/management-center`.
+
+To connect to your cluster, use
+
+cluster name: `dev`
+
+member address: `host.docker.internal`

@@ -1,12 +1,33 @@
 services:
-  hazelcast:
+  hazelcast-1:
     image: hazelcast/hazelcast:latest
     ports:
-    - "5701:5701"
+      - "5701:5701"
+    environment:
+      - HZ_NETWORK_JOIN_TCP_IP_ENABLED=true
+      - HZ_NETWORK_JOIN_TCP_IP_MEMBERS=hazelcast-1,hazelcast-2
+
+  hazelcast-2:
+    image: hazelcast/hazelcast:latest
+    environment:
+      - HZ_NETWORK_JOIN_TCP_IP_ENABLED=true
+      - HZ_NETWORK_JOIN_TCP_IP_MEMBERS=hazelcast-1,hazelcast-2
+
   management-center:
     image: hazelcast/management-center:latest
     ports:
     - "8080:8080"
     environment:
     - MC_DEFAULT_CLUSTER=dev
-    - MC_DEFAULT_CLUSTER_MEMBERS=hazelcast
+    - MC_DEFAULT_CLUSTER_MEMBERS=hazelcast-1,hazelcast-2
+
+  trade-source:
+    image: amazoncorretto:21
+    volumes:
+      - .:/project
+    command: >
+      java -cp /project/target/hazelcast-platform-training-5.0-SNAPSHOT-local.jar 
+          -Dhazelcast.client.config=/project/config/hazelcast-client.yaml 
+          -Dcluster.name=dev 
+          -Dcluster.member=hazelcast-1 
+          sources.TradeSource 

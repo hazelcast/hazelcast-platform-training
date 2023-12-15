@@ -119,4 +119,15 @@ HINT: You can use graphviz or http://viz-js.com to visualize the printed graph.
 14:24:11,906 [WriteLoggerP] [127.0.0.1]:5701 [dev] [5.3.5] [0aea-d464-f580-0001/loggerSink#0] Trade{time=1702322651899, company name='Alphabet Inc.', quantity=84, price=308}
 ```
 
+## Additional Notes
+
+You can run _Management Center_ with
+
+`docker run -d -p 8080:8080 hazelcast/management-center`.
+
+To connect to your cluster, use
+
+cluster name: `dev`
+
+member address: `host.docker.internal`
 

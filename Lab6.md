@@ -90,3 +90,15 @@ try to understand what is happening.
 
 1. Calculate the average price per symbol.
 2. Use a sliding window with grouping instead of a tumbling window. 
+
+## Additional Notes
+
+You can run _Management Center_ with
+
+`docker run -d -p 8080:8080 hazelcast/management-center`.
+
+To connect to your cluster, use
+
+cluster name: `dev`
+
+member address: `host.docker.internal`

@@ -65,3 +65,15 @@ See [Sinks.map](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/
 
 4. If you do #3, modify the listener to only display trades on a specific stock symbol. (Hint: you'll use a predicate in the listener to match the symbol.)
 
+## Additional Notes
+
+You can run _Management Center_ with
+
+`docker run -d -p 8080:8080 hazelcast/management-center`.
+
+To connect to your cluster, use
+
+cluster name: `dev`
+
+member address: `host.docker.internal`
+
