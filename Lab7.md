@@ -16,15 +16,30 @@ you will need to understand.  That is the subject of this lesson.
 #### 1. Start a remote cluster
 Before beginning, run `mvn clean package`.
 
-For the purpose of this lab, we will use Docker to run a "remote" cluster.
+For the purpose of this lab, we will use Docker to run a "remote" cluster.  We will 
+also run `TradeSource` as a client so that we will have some trades
+to process.
 
 `docker compose up -d`
 
 Navigate to http://localhost:8080 in your browser and verify that you can access 
 Hazelcast Management Center.  Use management center to verify that there is a 2 node 
-cluster.
+cluster and that the "trades" map is being updated.
+
+![ManCenter](images/Lab7ManCenter.png)
 
 > __NOTE:__ it may take a minute or so for Management Center to see both cluster members.
+
+##### Extra Credit
+The CLC configuration you created in Lab 1 should also work for this cluster, because 
+, even though it is running in Docker, one of the instances has a port mapping to 
+localhost:5701.  Use CLC to check the size of the "trades" map.  The name of this 
+cluster configuration is "local". Tell CLC which cluster to use with  the "-c" argument 
+as show below.
+
+```shell
+clc -c local map size  --name trades
+```
 
 #### 2. Package your job for deployment
 
@@ -34,24 +49,10 @@ created by the maven shade plugin.
 However, there are a couple of important caveats: 
 - classes with package names beginning with `com.hazelcast` cannot be deployed in a job
 - the `com.hazelcast` classes are already available on the Hazelcast cluster, so do not to 
-include them in your jar file
+include them in your jar file. 
 
-
-
-## Part 1: Set Up Environment
-
-1. Browse to [viridian.hazelcast.com](https://viridian.hazelcast.com). Create an account, then log in. Create a production cluster.
-
-2. In the Quick Connect guide, select CLI and follow the instructions to install and configure the Hazelcast Command Line Client.
-
-3. Verify that there are no jobs currently running.
-```shell
-\job list
-```
-4. Exit CLC.
-```shell
-\exit
-```
+The best way to package your job is to use the shade plugin and list the hazelcast 
+dependency with `provided` scope to keep it from being included in the uber jar.
 
 ## Part 2: Build Your Code
 

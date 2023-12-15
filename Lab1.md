@@ -14,13 +14,14 @@ the Command Line Client (CLC)
 ## Instructions 
 
 ### 1. Review the Code
-Open `src/main/java/Lab1.java` in your IDE and review the code. This program 
+Open `hazelcast-platform-labs/src/main/java/Lab1.java` in your IDE and review the code. This program 
 will start an embedded Hazelcast instance and submit a simple Pipeline that 
 writes log statements to the console.
 
 ### 2. Run It
 You can use the IDE or run it from the command line using maven as shown here. 
 ```shell
+cd hazelcast-platform-labs
 mvn package exec:java -Dexec.mainClass=Lab1
 ```
 
