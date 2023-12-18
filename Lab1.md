@@ -25,8 +25,6 @@ cd hazelcast-platform-labs
 mvn  package exec:java -Dexec.mainClass=Lab1
 ```
 
-> __NOTE:__ The reason for the `-Dlocal` will be discussed in Lab 7
-
 You should see output similar to the example below.
 ```shell
 14:08:22,895 [WriteLoggerP] [127.0.0.1]:5701 [dev] [5.3.5] [0ae3-1743-df80-0001/loggerSink#0] 0
