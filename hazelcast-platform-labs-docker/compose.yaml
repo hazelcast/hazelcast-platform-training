@@ -26,7 +26,7 @@ services:
     volumes:
       - .:/project
     command: >
-      java -cp /project/hazelcast-platform-labs-local/target/hazelcast-platform-labs-local-5.0-SNAPSHOT.jar 
+      java -cp /project/target/hazelcast-platform-labs-docker-5.0-SNAPSHOT.jar 
           -Dhazelcast.client.config=/project/config/hazelcast-client.yaml 
           -Dcluster.name=dev 
           -Dcluster.member=hazelcast-1 

@@ -22,8 +22,10 @@ writes log statements to the console.
 You can use the IDE or run it from the command line using maven as shown here. 
 ```shell
 cd hazelcast-platform-labs
-mvn package exec:java -Dexec.mainClass=Lab1
+mvn  package exec:java -Dexec.mainClass=Lab1
 ```
+
+> __NOTE:__ The reason for the `-Dlocal` will be discussed in Lab 7
 
 You should see output similar to the example below.
 ```shell

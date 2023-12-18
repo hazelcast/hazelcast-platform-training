@@ -27,6 +27,6 @@
 
     <modules>
         <module>hazelcast-platform-labs</module>
-        <module>hazelcast-platform-labs-local</module>
+        <module>hazelcast-platform-labs-docker</module>
     </modules>
 </project>

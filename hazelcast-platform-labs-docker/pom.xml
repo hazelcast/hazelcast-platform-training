@@ -10,7 +10,7 @@
         <version>5.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>hazelcast-platform-labs-local</artifactId>
+    <artifactId>hazelcast-platform-labs-docker</artifactId>
 
     <dependencies>
         <dependency>

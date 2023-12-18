@@ -7,9 +7,14 @@ you will need to understand.  That is the subject of this lesson.
 
 ## Objectives 
 * Package your job for deployment to a remote cluster.
+* Submit a job to a remote cluster using the Hazelcast CLC
 * Write a client that submits a job.
 * Stream results from a job back to the client that submitted it.
-* Submit a job using the Hazelcast CLC
+
+> __NOTE:__
+>
+> if you are having trouble, we provide an example solution in the `Solutions`
+> directory.
 
 ## Instructions
 
@@ -20,7 +25,10 @@ For the purpose of this lab, we will use Docker to run a "remote" cluster.  We w
 also run `TradeSource` as a client so that we will have some trades
 to process.
 
-`docker compose up -d`
+```shell
+cd hazelcast-platform-labs-docker
+docker compose up -d
+```
 
 Navigate to http://localhost:8080 in your browser and verify that you can access 
 Hazelcast Management Center.  Use management center to verify that there is a 2 node 
@@ -53,39 +61,82 @@ include them in your jar file.
 
 The best way to package your job is to use the shade plugin and list the hazelcast 
 dependency with `provided` scope to keep it from being included in the uber jar.
+Unfortunately, making the hazelcast dependency `provided` does not work well for 
+local development.  In this lab, we have used maven profiles to resolve the conflict.
 
-## Part 2: Build Your Code
-
-1. (whatever steps are needed to build the code)
-
-## Part 3: Submit Your Code
-
-1. (first submission should have missing class info)
+Review `pom.xml` in the `hazelcast-platform-labs` directory then, build the jar for 
+release as shown below.
 
 ```shell
-clc -c <your-cluster> job submit <filename.jar>
+# in hazelcast-platform-labs
+mvn package -Drelease
 ```
-2. (what troubleshooting tools are available to see what went wrong?)
 
-3. Include the class in your submit command.
+#### 3. Deploy your jar using CLC
+
+It is important to understand how the deployment process works.  In all 
+the previous examples, client and server code have been mixed making 
+it difficult to tell what is running where.  The diagram below shows 
+how the CLC based deployment process works.
+
+![Deploying](images/Deploying.png)
+
+When you are ready, submit your job to the remote cluster using CLC.
 ```shell
-clc -c <your cluster> job submit <filename.jar> --class <path>
+# in hazelcast-platform-labs
+clc -c local job submit target/hazelcast-platform-labs-5.0-SNAPSHOT.jar --class Lab7 --name Lab7 --wait
 ```
 
-4. Verify that the job is running.
+You can now use CLC or Management Center to verify that the job is running.
 ```shell
-clc -c <your cluster> job list
+clc -c local job list
 ```
 
-5. In the Viridian dashboard, open Management Center. Go to Stream Processing > Dashboard
+Also, since this job just reads trades and writes them to a log, you should 
+be able to see the output in the logs of both members of the remote cluster.
 
-![MC](images/console-mc.png)
- 
- (screen shot of jobs dashboard)
+```shell
+# in hazelcast-platform-labs-docker
+docker compose logs --follow hazelcast-1 hazelcast-2 
+```
 
- (What are we looking for/at? Any potential problems we can identify here?)
+#### 4. Modify Lab7 to deploy itself without CLC and use an Observable to receive streamed results
 
-6. Go to Stream Processing > Jobs, then open the detailed view of your job.
+Typically, it is easier to use CLC to deploy a job to a remote cluster.
+That approach allows you to move from developing to deploying without 
+changing the code.  However, there may be times when you want to 
+deploy a job programmatically.  That is what we will do in this part.
 
-(what are we looking for/at? Any potential problems we can identify here?)
+Also, there is a special `Sink` which can be used to stream the results 
+of a job back  to a client. First read the documentation for 
+[Sinks.observable](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/pipeline/Sinks.html#observable-com.hazelcast.jet.Observable-)
+ modify the lab 7 code to send the results back to the client.
 
+Note that in this case, you will not be able to rely on CLC for the 
+connection to the cluster.  The program will need to create a client 
+connection.  There are _many_ ways to configure a client.  The 
+recommended approach is to use 
+`HazelcastClient.newHazelcastClient()` which follows a documented 
+process for finding a client configuration. See 
+[the documentation page](https://docs.hazelcast.com/hazelcast/5.3/configuration/understanding-configuration)
+, especially "Configuration Precedence".  For this lab, a client configuration file has 
+been provided: `hazelcast-client.yaml`
+
+Also, when a client submits a job, it needs to attach all  required
+classes using [JobConfig.addClass](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/config/JobConfig.html).
+When using CLC, this is taken care of automatically.
+
+Complete the code by following the instructions in `Lab7.java` then 
+test it by running it from the IDE.
+
+## Additional Notes
+
+You can run _Management Center_ with
+
+`docker run -d -p 8080:8080 hazelcast/management-center`.
+
+To connect to your cluster, use
+
+cluster name: `dev`
+
+member address: `host.docker.internal`
