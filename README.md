@@ -36,5 +36,5 @@ the scratch.
 
  ![Open Lab1](images/setup-3.png)
 
-7. Setup the Java SDK to run the labs. Use the Download SDK option unless you have Java 8 or higher installed in your computer.
+7. Setup the Java SDK to run the labs. Use the Download SDK option unless you already have the required Java installation on your computer.
 
