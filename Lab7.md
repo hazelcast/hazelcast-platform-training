@@ -6,10 +6,10 @@ your job to it.  Deploying to a remote cluster introduces some new complications
 you will need to understand.  That is the subject of this lesson.
 
 ## Objectives 
-* Package your job for deployment to a remote cluster.
+* Package your job for deployment to a remote cluster
 * Submit a job to a remote cluster using the Hazelcast CLC
-* Write a client that submits a job.
-* Stream results from a job back to the client that submitted it.
+* Write a client that submits a job
+* Stream results from a job back to the client that submitted it
 
 > __NOTE:__
 >
