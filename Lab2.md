@@ -1,46 +1,48 @@
-# Lab 2 - Transforming a Data Stream
+# Lab 2 - Basic Data Transformations 
+
+In this lab you will use the Pipeline API to do filtering and simple 
+transformation on an event stream.
+
 ## Objectives
 
-* Run pipeline that prints a stream to the console.
-* Create a filter that only prints even numbers from the stream.
-* Create pipeline that processes data from a file.
+* Familiarize yourself with  the `Pipeline` API 
+* Write code to do basic data transformation and filtering
 
-> Note: if you are having trouble, we provide an example solution in the `Solutions` directory. 
+> __NOTE:__ if you are having trouble, we provide an example solution in the `Solutions` directory.
 
-## Steps
+## Instructions
+In this lab, the source is a stream of Fahrenheit temperatures.  You 
+will write a `Pipeline` to process the stream.  The `Pipeline` will 
+- use `StreamStage.map` to convert the Fahrenheit temperatures to Celsius
+- use `StreamStage.filter` to keep only temperature that are below 0
+- write the stream of negative Celsius temperatures to a log 
 
-### Part 1 - Print Stream to Console
+Start by reviewing the javadoc for these two methods in 
+https://docs.hazelcast.org/docs/latest/javadoc/index.html?com/hazelcast/jet/pipeline/StreamStage.html
 
-1. Run the code provided in the Lab2.java file. You should see output similar to this in the `Run` window. 
+Open `Lab2.java` and follow the instructions.
 
-![Lab 2 Step 1 output](images/Lab2Step1.png)
+> __NOTE__ 
+> 
+> Notice that in this exercise, the Pipeline is being constructed 
+> in multiple statements while, in the previous exercise it was 
+> constructed with one long statement.
+> 
+> The two formats are logically equivalent but the multi-statement approach 
+> can make the pipeline code easier to understand. You can see that 
+> each statement adds a new operation to a previous `StreamStage` 
+> and each statement that is not a `writeTo` returns a new `StreamStage`. 
 
-### Part 2 - Filter for Even Numbers
+## Additional Notes
 
-1. Add a filter so that odd numbers are not displayed.
+You can run _Management Center_ with 
 
-![Lab 2 Step 2 output](images/Lab2Step2.png)
+`docker run -d -p 8080:8080 hazelcast/management-center`.
 
-### Part 3 - Read from a File in Real Time
+To connect to your cluster, use 
 
-1. Open a terminal window. Use touch to create an empty file. 
+cluster name: `dev`
 
-2. In your code, set the DIRECTORY variable to the location of your file.
+member address: `host.docker.internal`
 
-3. Change the source to use FileWatcher. FileWatcher monitors a directory and captures changes to any files in the directory as input. 
 
-4. We want our output to be Long, but FileWatcher input is String. We need to use a map to convert the String to Long before outputting to the console. 
-
-5. Run your code.
-
-6. To test it, go back to your terminal window. Use `echo “some number” >> filename.txt` to add lines to the data file. 
-
-![Input](images/Lab2Part3Input.png)
-
-You should see all your input being echoed to the console.
-
-![Output](images/Lab2Part3Output.png)
-
- ### Extra Practice
-
- Add a filter to Part 3 so that only numbers divisible by 3 are copied to the console.

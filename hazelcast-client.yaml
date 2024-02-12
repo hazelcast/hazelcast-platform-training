@@ -1,0 +1,11 @@
+hazelcast-client:
+  network:
+    # List of addresses for the client to try to connect to. All members of
+    # a Hazelcast cluster accept client connections.
+    # Use the format <hostname>:<port>
+    # If a port number is not specified, port range 5701-5703 will be tried.
+    cluster-members:
+      - localhost:5701
+
+    # disable smart routing because only one member is reachable
+    smart-routing: false
