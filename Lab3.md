@@ -6,9 +6,9 @@ an event Sink. In this lab, we'll do both.
 
 ## Objectives
 * Use an IMap as an event source
-* Learn about timestamps and event sources.
+* Learn about timestamps and event sources
 * Use an IMap as an event sink
-* React to changes in an IMap using an event listener.
+* React to changes in an IMap using an event listener
 
 > __NOTE__ 
 > 

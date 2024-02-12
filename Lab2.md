@@ -5,8 +5,8 @@ transformation on an event stream.
 
 ## Objectives
 
-* become familiar with the `Pipeline` API 
-* learn how to do basic data transformation and filtering
+* Familiarize yourself with  the `Pipeline` API 
+* Write code to do basic data transformation and filtering
 
 > __NOTE:__ if you are having trouble, we provide an example solution in the `Solutions` directory.
 

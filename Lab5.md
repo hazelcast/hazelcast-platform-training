@@ -16,7 +16,7 @@ a similar scenario.  We will detect when the price of a certain stock has
 changed by 25% or more.  
 
 ## Objectives
-* Understand how to use the `mapStateful` operation.
+* Understand how to use the `mapStateful` operation
 * Understand the difference between a `StreamStage` and a `StreamStageWithKey`
 
 > __NOTE:__ 

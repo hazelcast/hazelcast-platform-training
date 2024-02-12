@@ -19,9 +19,9 @@ An example of counting the number of trades in a 3 second window is shown below
 ```
 
 ## Objectives 
-* For each symbol, compute the trading volume (i.e. sum of quantity) in three second windows.
+* For each symbol, compute the trading volume (i.e. sum of quantity) in three second windows
 * Extend the example to emit interim results
-* 
+
 > __NOTE:__
 >
 > if you are having trouble, we provide an example solution in the `Solutions`

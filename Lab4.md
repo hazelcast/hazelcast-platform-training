@@ -18,8 +18,8 @@ way we will also learn a little bit about how Hazelcast routes events between
 tasks.
 
 ## Objectives
-* Enrich the streaming data with the company name information.
-* Understand a little about data-aware routing as it pertains to event processing.
+* Enrich the streaming data with the company name information
+* Explain data-aware routing as it pertains to event processing
 
 > NOTE: 
 > 
