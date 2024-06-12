@@ -62,7 +62,7 @@ stream.
 #### 2. Learn about routing events
 
 Although there is only one node, in general there will be multiple. Take a 
-moment to review the documentation on [parallel processing](https://docs.hazelcast.com/hazelcast/5.3/architecture/distributed-computing#parallel-processing). As 
+moment to review the documentation on [parallel processing](https://docs.hazelcast.com/hazelcast/latest/architecture/distributed-computing#parallel-processing). As 
 you can see, each job is described by a directed acyclic graph (DAG) of tasks.  
 Because Hazelcast is data location-aware, or "partition aware", it directs 
 the execution of tasks so as to reduce data movement.  
