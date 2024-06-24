@@ -67,7 +67,7 @@ Modify the window definition to publish intermediate results every second.
 
 The intermediate results can be counter-intuitive and it's worth spending some time to 
 understand what's really going on.  The key is to understand that _event time is not 
-related to the actual time_.   See [this discussion](https://docs.hazelcast.com/hazelcast/5.3/pipelines/building-pipelines#event-disorder) 
+related to the actual time_.   See [this discussion](https://docs.hazelcast.com/hazelcast/latest/pipelines/building-pipelines#event-disorder) 
 of how Hazelcast keeps track of the "event time" within the stream, which is separate from 
 "processing time".  
 

@@ -118,12 +118,12 @@ connection.  There are _many_ ways to configure a client.  The
 recommended approach is to use 
 `HazelcastClient.newHazelcastClient()` which follows a documented 
 process for finding a client configuration. See 
-[the documentation page](https://docs.hazelcast.com/hazelcast/5.3/configuration/understanding-configuration)
+[the documentation page](https://docs.hazelcast.com/hazelcast/latest/configuration/understanding-configuration)
 , especially "Configuration Precedence".  For this lab, a client configuration file has 
 been provided: `hazelcast-client.yaml`
 
 Also, when a client submits a job, it needs to attach all  required
-classes using [JobConfig.addClass](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/config/JobConfig.html).
+classes using [JobConfig.addClass](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/config/JobConfig.html).
 When using CLC, this is taken care of automatically.
 
 Complete the code by following the instructions in `Lab7.java` then 
