@@ -33,14 +33,14 @@ public class Lab7 {
 
         // 2. register a new observable with Jet and a new Observer on the Observable
         //    The Observer should just print the received event to the console
-        //    See https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/JetService.html#newObservable--
+        //    See https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/JetService.html#newObservable()
 
 
         // 3. Pass the Observable created above into the buildPipeline method so it can be incorporated into the Pipeline
         Pipeline p = buildPipeline();
 
         // 4. Since the job is being deployed by this client rather than CLC, we must add the necessary classes to the
-        //    job's class path via [JobConfig.addClass](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/config/JobConfig.html)
+        //    job's class path via [JobConfig.addClass](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/config/JobConfig.html)
         Job job = hz.getJet().newJob(p);
 
         // 5.  Since this job is meant to be used only by this client, cancel it when this client exits

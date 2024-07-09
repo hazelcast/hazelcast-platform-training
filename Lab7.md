@@ -109,7 +109,7 @@ deploy a job programmatically.  That is what we will do in this part.
 
 Also, there is a special `Sink` which can be used to stream the results 
 of a job back  to a client. First read the documentation for 
-[Sinks.observable](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/pipeline/Sinks.html#observable-com.hazelcast.jet.Observable-)
+[Sinks.observable](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/Sinks.html#observable(com.hazelcast.jet.Observable))
  modify the lab 7 code to send the results back to the client.
 
 Note that in this case, you will not be able to rely on CLC for the 
