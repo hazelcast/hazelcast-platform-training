@@ -29,7 +29,7 @@ events out to the `latest_trade` map.
 
 #### 1. read events from the `trades` IMap
 
-Read the javadoc for the [Sources.mapJournal](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/Sources.html#mapJournal-java.lang.String-com.hazelcast.jet.pipeline.JournalInitialPosition-).  
+Read the javadoc for the [Sources.mapJournal](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/Sources.html#mapJournal(java.lang.String,com.hazelcast.jet.pipeline.JournalInitialPosition)).  
 
 When ingesting events, you must specify _when_ the event happened using 
 one of the methods of [StreamSourceStage](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/StreamSourceStage.html).
@@ -53,7 +53,7 @@ with `symbol` as the key.
 
 #### 3. Write the result to the `latest_trade` map. 
 
-See [Sinks.map](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/Sinks.html#map-java.lang.String-) 
+See [Sinks.map](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/Sinks.html#map(java.lang.String)) 
 
 ## Ideas for Extra Practice
 

@@ -87,7 +87,7 @@ on a 2 machine cluster with each member having 2 cores.
 
 #### 3. Perform enrichment using `StreamStage.mapUsingIMap`
 
-Review the documentation for [StreamStage.mapUsingIMap](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/StreamStage.html?mapUsingIMap-java.lang.String-com.hazelcast.function.FunctionEx-com.hazelcast.function.BiFunctionEx-), then add a stage to the pipeline to do the 
+Review the documentation for [StreamStage.mapUsingIMap](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/StreamStage.html#mapUsingIMap(java.lang.String,com.hazelcast.function.FunctionEx,com.hazelcast.function.BiFunctionEx)), then add a stage to the pipeline to do the 
 enhancement.  
 
 > __HINT:__ `mapUsingIMap` takes 3 _type_ parameters.  You may need to explicitly 
