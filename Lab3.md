@@ -29,10 +29,10 @@ events out to the `latest_trade` map.
 
 #### 1. read events from the `trades` IMap
 
-Read the javadoc for the [Sources.mapJournal](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/pipeline/Sources.html#mapJournal-java.lang.String-com.hazelcast.jet.pipeline.JournalInitialPosition-).  
+Read the javadoc for the [Sources.mapJournal](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/Sources.html#mapJournal(java.lang.String,com.hazelcast.jet.pipeline.JournalInitialPosition)).  
 
 When ingesting events, you must specify _when_ the event happened using 
-one of the methods of [StreamSourceStage](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/pipeline/StreamSourceStage.html).
+one of the methods of [StreamSourceStage](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/StreamSourceStage.html).
 
 It is important to remember that the time the event actually occurred is often not the same as the time it is ingested.  This creates 
 many issues.  You can find a good discussion here: [Event Timestamps](https://docs.hazelcast.com/hazelcast/latest/pipelines/building-pipelines#event-timestamps). 
@@ -42,7 +42,7 @@ late events to arrive.
 
 #### 2. change  `Map.Entry<Integer, Trade>` into Tuple2<String, Trade>
 
-See the javadoc for [Tuple2](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/datamodel/Tuple2.html). Note that it 
+See the javadoc for [Tuple2](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/datamodel/Tuple2.html). Note that it 
 implements `Map.Entry`.  A `Tuple2` can be written directly to an `IMap` 
 so this step will output a `Tuple2`.
 
@@ -53,7 +53,7 @@ with `symbol` as the key.
 
 #### 3. Write the result to the `latest_trade` map. 
 
-See [Sinks.map](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/pipeline/Sinks.html#map-java.lang.String-) 
+See [Sinks.map](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/Sinks.html#map(java.lang.String)) 
 
 ## Ideas for Extra Practice
 

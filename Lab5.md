@@ -26,15 +26,15 @@ changed by 25% or more.
 
 ## Instructions
 
-First, read the java doc on [StreamStageWithKey.mapStateful](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/pipeline/StreamStageWithKey.html#mapStateful-com.hazelcast.function.SupplierEx-com.hazelcast.jet.function.TriFunction-).  
+First, read the java doc on [StreamStageWithKey.mapStateful](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/StreamStageWithKey.html#mapStateful(com.hazelcast.function.SupplierEx,com.hazelcast.jet.function.TriFunction)).  
 
 Note that the platform will automatically use the create function you provide 
 to create a state object _for each grouping key_.  You can convert a regular 
-`StreamStage` into a `StreamStageWithKey` using [StreamStage.groupingKey](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/pipeline/StreamStage.html#groupingKey-com.hazelcast.function.FunctionEx-).
+`StreamStage` into a `StreamStageWithKey` using [StreamStage.groupingKey](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/StreamStage.html#groupingKey(com.hazelcast.function.FunctionEx)).
 
 Hazelcast provides a number of useful state objects in the 
 `com.hazelcast.jet.accumulator` package.  For this lab, we can use 
-[LongAccumulator](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/accumulator/LongAccumulator.html).  You are also 
+[LongAccumulator](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/accumulator/LongAccumulator.html).  You are also 
 free to use your own state object so long as it is serializable.
 
 #### 1. Use the `StreamStage.groupingKey` method to create a `StreamStageWithKey`

@@ -5,9 +5,9 @@ platform.  Aggregation is a 3-step process:
 1. __Define a grouping key.__  Generally we don't want to aggregate ALL 
 of the events, we want to aggregate by something like `customer_id`.   
 2. __Define the Window__.  This describes _how much_ data to aggregate. See
-the javadoc for [WindowDefinition](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/pipeline/WindowDefinition.html).
+the javadoc for [WindowDefinition](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/pipeline/WindowDefinition.html).
 3. __Define the aggregation operation__, for example count or sum.  Many 
-aggregating operations are provided by the [AggregateOperations](https://docs.hazelcast.org/docs/5.3.5/javadoc/com/hazelcast/jet/aggregate/AggregateOperations.html) class.  It is also possible to define custom aggregations but that
+aggregating operations are provided by the [AggregateOperations](https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/jet/aggregate/AggregateOperations.html) class.  It is also possible to define custom aggregations but that
 is not covered in this lab.
 
 An example of counting the number of trades in a 3 second window is shown below  

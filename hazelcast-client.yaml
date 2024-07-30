@@ -7,5 +7,6 @@ hazelcast-client:
     cluster-members:
       - localhost:5701
 
-    # disable smart routing because only one member is reachable
-    smart-routing: false
+    # use single member routing because only one member is reachable
+    cluster-routing:
+      mode: SINGLE_MEMBER
